@@ -1,3 +1,6 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 import Pagination from 'react-js-pagination';
 
@@ -6,7 +9,7 @@ import { shallow } from 'enzyme';
 import { ResourceType } from 'interfaces';
 import ResourceListItem from 'components/common/ResourceListItem/index';
 
-import PaginatedResourceList, { PaginatedResourceListProps } from './';
+import PaginatedResourceList, { PaginatedResourceListProps } from '.';
 import * as CONSTANTS from '../constants';
 
 describe('PaginatedResourceList', () => {
@@ -23,40 +26,39 @@ describe('PaginatedResourceList', () => {
       ],
       itemsPerPage: 4,
       source: 'testSource',
-      ...propOverrides
+      ...propOverrides,
     };
-    const wrapper = shallow<PaginatedResourceList>(<PaginatedResourceList {...props} />);
+    const wrapper = shallow<PaginatedResourceList>(
+      <PaginatedResourceList {...props} />
+    );
     return { props, wrapper };
   };
 
   describe('componentDidUpdate', () => {
     it('updates activePage state if the activePage is out of bounds by multiple pages', () => {
-      const wrapper = setup({ itemsPerPage: 2 }).wrapper;
+      const { wrapper } = setup({ itemsPerPage: 2 });
       wrapper.setState({ activePage: 2 });
       wrapper.setProps({
-        allItems: [
-          { type: ResourceType.table },
-          { type: ResourceType.table },
-        ]
+        allItems: [{ type: ResourceType.table }, { type: ResourceType.table }],
       });
       expect(wrapper.state().activePage).toEqual(0);
-    })
+    });
 
     it('updates activePage state if the activePage is out of bounds by one page', () => {
-      const wrapper = setup({ itemsPerPage: 2 }).wrapper;
+      const { wrapper } = setup({ itemsPerPage: 2 });
       wrapper.setState({ activePage: 2 });
       wrapper.setProps({
         allItems: [
           { type: ResourceType.table },
           { type: ResourceType.table },
           { type: ResourceType.table },
-        ]
-      })
+        ],
+      });
       expect(wrapper.state().activePage).toEqual(1);
-    })
+    });
 
     it('does not update activePage if new values are not out of bounds', () => {
-      const wrapper = setup({ itemsPerPage: 2 }).wrapper;
+      const { wrapper } = setup({ itemsPerPage: 2 });
       wrapper.setState({ activePage: 2 });
       wrapper.setProps({
         allItems: [
@@ -65,16 +67,16 @@ describe('PaginatedResourceList', () => {
           { type: ResourceType.table },
           { type: ResourceType.table },
           { type: ResourceType.table },
-        ]
-      })
+        ],
+      });
       expect(wrapper.state().activePage).toEqual(2);
-    })
+    });
   });
 
   describe('onPagination', () => {
     it('calls setState to update the activePage', () => {
       setStateSpy.mockClear();
-      const wrapper = setup().wrapper;
+      const { wrapper } = setup();
       wrapper.instance().onPagination(3);
       expect(setStateSpy).toHaveBeenCalledWith({ activePage: 2 });
     });
@@ -90,7 +92,10 @@ describe('PaginatedResourceList', () => {
     });
 
     it('renders empty messages if it exists and there are no items', () => {
-      const { props, wrapper } = setup({ allItems: [], emptyText: 'Nothing Here'});
+      const { props, wrapper } = setup({
+        allItems: [],
+        emptyText: 'Nothing Here',
+      });
       expect(wrapper.find('.empty-message').text()).toBe(props.emptyText);
     });
 
@@ -100,12 +105,12 @@ describe('PaginatedResourceList', () => {
     });
 
     it('renders a pagination widget when there are more than itemsPerPage items', () => {
-      expect(wrapper.find(Pagination).exists()).toBe(true)
+      expect(wrapper.find(Pagination).exists()).toBe(true);
     });
 
     it('hides a pagination widget when there are fewer than itemsPerPage items', () => {
       const { props, wrapper } = setup({ itemsPerPage: 20 });
-      expect(wrapper.find(Pagination).exists()).toBe(false)
+      expect(wrapper.find(Pagination).exists()).toBe(false);
     });
   });
 });

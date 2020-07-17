@@ -1,16 +1,17 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { GlobalState } from 'ducks/rootReducer';
 
+import { getFilterConfigByResource } from 'config/config-utils';
+import { FilterType, ResourceType } from 'interfaces';
 import { CheckboxFilterProperties } from './CheckBoxFilter';
 import FilterSection from './FilterSection';
 
-import { getFilterConfigByResource } from 'config/config-utils';
-
-import { FilterType, ResourceType } from 'interfaces';
-
-import './styles.scss'
+import './styles.scss';
 
 export interface FilterSection {
   categoryId: string;
@@ -30,33 +31,36 @@ export interface StateFromProps {
 export type SearchFilterProps = StateFromProps;
 
 export class SearchFilter extends React.Component<SearchFilterProps> {
-  createFilterSection = (key: string, section: FilterSection | CheckboxFilterSection) => {
+  createFilterSection = (
+    key: string,
+    section: FilterSection | CheckboxFilterSection
+  ) => {
     const { categoryId, helpText, title, type } = section;
-    const options = (section as CheckboxFilterSection).options ? (section as CheckboxFilterSection).options : undefined;
+    const options = (section as CheckboxFilterSection).options
+      ? (section as CheckboxFilterSection).options
+      : undefined;
     return (
       <FilterSection
         key={key}
-        categoryId={ categoryId }
-        helpText={ helpText }
-        title={ title }
-        type={ type }
-        options={ options }
+        categoryId={categoryId}
+        helpText={helpText}
+        title={title}
+        type={type}
+        options={options}
       />
-    )
+    );
   };
 
   renderFilterSections = () => {
-    return this.props.filterSections.map((section) => this.createFilterSection(`section:${section.categoryId}`, section));
+    return this.props.filterSections.map((section) =>
+      this.createFilterSection(`section:${section.categoryId}`, section)
+    );
   };
 
   render = () => {
-    return (
-      <>
-        { this.renderFilterSections() }
-      </>
-    )
+    return <>{this.renderFilterSections()}</>;
   };
-};
+}
 
 export const mapStateToProps = (state: GlobalState) => {
   const resourceType = state.search.resource;
@@ -70,11 +74,13 @@ export const mapStateToProps = (state: GlobalState) => {
         helpText: categoryConfig.helpText,
         title: categoryConfig.displayName,
         type: categoryConfig.type,
-      }
+      };
       if (categoryConfig.type === FilterType.CHECKBOX_SELECT) {
-        section['options'] = categoryConfig.options.map((option) => {
-          return { value: option.value, label: option.displayName }
-        });
+        (section as CheckboxFilterSection).options = categoryConfig.options.map(
+          ({ value, displayName }) => {
+            return { value, label: displayName };
+          }
+        );
       }
       filterSections.push(section);
     });

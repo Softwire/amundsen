@@ -1,3 +1,6 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 
 // TODO: Use css-modules instead of 'import'
@@ -6,7 +9,7 @@ import './styles.scss';
 export enum CaseType {
   LOWER_CASE = 'lowerCase',
   SENTENCE_CASE = 'sentenceCase',
-  UPPER_CASE = 'upperCase'
+  UPPER_CASE = 'upperCase',
 }
 
 export interface FlagProps {
@@ -29,11 +32,17 @@ export function convertText(str: string, caseType: string): string {
   }
 }
 
-const Flag: React.SFC<FlagProps> = ({ caseType, text, labelStyle }) => {
+const Flag: React.SFC<FlagProps> = ({
+  caseType,
+  text,
+  labelStyle,
+}: FlagProps) => {
   // TODO: After upgrading to Bootstrap 4, this component should leverage badges
   // https://getbootstrap.com/docs/4.1/components/badge/
   return (
-    <span className={`flag label label-${labelStyle}`}>{convertText(text, caseType)}</span>
+    <span className={`flag label label-${labelStyle}`}>
+      {convertText(text, caseType)}
+    </span>
   );
 };
 

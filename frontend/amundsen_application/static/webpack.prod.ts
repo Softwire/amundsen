@@ -1,8 +1,9 @@
 import merge from 'webpack-merge';
-import commonConfig from './webpack.common'
 import TerserPlugin from 'terser-webpack-plugin';
+import commonConfig from './webpack.common';
 
 export default merge(commonConfig, {
+  mode: 'production',
   optimization: {
     // minify code. also use parameters that improve build speed.
     minimizer: [
@@ -14,4 +15,3 @@ export default merge(commonConfig, {
     ],
   },
 });
-

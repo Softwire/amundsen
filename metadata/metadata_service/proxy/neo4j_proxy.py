@@ -1,3 +1,6 @@
+# Copyright Contributors to the Amundsen project.
+# SPDX-License-Identifier: Apache-2.0
+
 import logging
 import textwrap
 import time
@@ -5,6 +8,7 @@ from random import randint
 from typing import (Any, Dict, List, Optional, Tuple, Union,  # noqa: F401
                     no_type_check)
 
+import neo4j
 from amundsen_common.models.dashboard import DashboardSummary
 from amundsen_common.models.popular_table import PopularTable
 from amundsen_common.models.table import (Application, Column, Reader, Source,
@@ -14,9 +18,10 @@ from amundsen_common.models.table import Tag
 from amundsen_common.models.user import User as UserEntity
 from beaker.cache import CacheManager
 from beaker.util import parse_cache_config_options
+from flask import current_app, has_app_context
 from neo4j import BoltStatementResult, Driver, GraphDatabase  # noqa: F401
-import neo4j
 
+from metadata_service import config
 from metadata_service.entity.dashboard_detail import DashboardDetail as DashboardDetailEntity
 from metadata_service.entity.dashboard_query import DashboardQuery as DashboardQueryEntity
 from metadata_service.entity.description import Description
@@ -47,7 +52,7 @@ class Neo4jProxy(BaseProxy):
                  password: str = '',
                  num_conns: int = 50,
                  max_connection_lifetime_sec: int = 100,
-                 encrypted: bool = True,
+                 encrypted: bool = False,
                  validate_ssl: bool = False) -> None:
         """
         There's currently no request timeout from client side where server
@@ -60,6 +65,7 @@ class Neo4jProxy(BaseProxy):
         value needs to be smaller than surrounding network environment's timeout.
         """
         endpoint = f'{host}:{port}'
+        LOGGER.info('NEO4J endpoint: {}'.format(endpoint))
         trust = neo4j.TRUST_SYSTEM_CA_SIGNED_CERTIFICATES if validate_ssl else neo4j.TRUST_ALL_CERTIFICATES
         self._driver = GraphDatabase.driver(endpoint, max_connection_pool_size=num_conns,
                                             connection_timeout=10,
@@ -387,7 +393,6 @@ class Neo4jProxy(BaseProxy):
             raise e
 
         finally:
-            tx.close()
             if LOGGER.isEnabledFor(logging.DEBUG):
                 LOGGER.debug('Update process elapsed for {} seconds'.format(time.time() - start))
 
@@ -488,9 +493,6 @@ class Neo4jProxy(BaseProxy):
             raise e
 
         finally:
-
-            tx.close()
-
             if LOGGER.isEnabledFor(logging.DEBUG):
                 LOGGER.debug('Update process elapsed for {} seconds'.format(time.time() - start))
 
@@ -529,14 +531,12 @@ class Neo4jProxy(BaseProxy):
                 raise RuntimeError('Failed to create relation between '
                                    'owner {owner} and table {tbl}'.format(owner=owner,
                                                                           tbl=table_uri))
+            tx.commit()
         except Exception as e:
             if not tx.closed():
                 tx.rollback()
             # propagate the exception back to api
             raise e
-        finally:
-            tx.commit()
-            tx.close()
 
     @timer_with_counter
     def delete_owner(self, *,
@@ -564,7 +564,6 @@ class Neo4jProxy(BaseProxy):
             raise e
         finally:
             tx.commit()
-            tx.close()
 
     @timer_with_counter
     def add_tag(self, *,
@@ -625,9 +624,6 @@ class Neo4jProxy(BaseProxy):
                 tx.rollback()
             # propagate the exception back to api
             raise e
-        finally:
-            if not tx.closed():
-                tx.close()
 
     @timer_with_counter
     def delete_tag(self, *,
@@ -659,14 +655,12 @@ class Neo4jProxy(BaseProxy):
             tx.run(delete_query, {'tag': tag,
                                   'key': id,
                                   'tag_type': tag_type})
+            tx.commit()
         except Exception as e:
             # propagate the exception back to api
             if not tx.closed():
                 tx.rollback()
             raise e
-        finally:
-            tx.commit()
-            tx.close()
 
     @timer_with_counter
     def get_tags(self) -> List:
@@ -726,14 +720,15 @@ class Neo4jProxy(BaseProxy):
         query = textwrap.dedent("""
         MATCH (tbl:Table)-[r:READ_BY]->(u:User)
         WITH tbl.key as table_key, count(distinct u) as readers, sum(r.read_count) as total_reads
-        WHERE readers > 10
+        WHERE readers >= $num_readers
         RETURN table_key, readers, total_reads, (readers * log(total_reads)) as score
         ORDER BY score DESC LIMIT $num_entries;
         """)
-
         LOGGER.info('Querying popular tables URIs')
+        num_readers = current_app.config['POPULAR_TABLE_MINIMUM_READER_COUNT']
         records = self._execute_cypher_query(statement=query,
-                                             param_dict={'num_entries': num_entries})
+                                             param_dict={'num_readers': num_readers,
+                                                         'num_entries': num_entries})
 
         return [record['table_key'] for record in records]
 
@@ -817,6 +812,19 @@ class Neo4jProxy(BaseProxy):
 
     @staticmethod
     def _build_user_from_record(record: dict, manager_name: str = '') -> UserEntity:
+        """
+        Builds user record from Cypher query result. Other than the one defined in amundsen_common.models.user.User,
+        you could add more fields from User node into the User model by specifying keys in config.USER_OTHER_KEYS
+        :param record:
+        :param manager_name:
+        :return:
+        """
+        other_key_values = {}
+        if has_app_context() and current_app.config[config.USER_OTHER_KEYS]:
+            for k in current_app.config[config.USER_OTHER_KEYS]:
+                if k in record:
+                    other_key_values[k] = record[k]
+
         return UserEntity(email=record['email'],
                           first_name=record.get('first_name'),
                           last_name=record.get('last_name'),
@@ -827,7 +835,8 @@ class Neo4jProxy(BaseProxy):
                           slack_id=record.get('slack_id'),
                           employee_type=record.get('employee_type'),
                           role_name=record.get('role_name'),
-                          manager_fullname=record.get('manager_fullname', manager_name))
+                          manager_fullname=record.get('manager_fullname', manager_name),
+                          other_key_values=other_key_values)
 
     @staticmethod
     def _get_user_resource_relationship_clause(relation_type: UserResourceRel, id: str = None,
@@ -1032,8 +1041,6 @@ class Neo4jProxy(BaseProxy):
                 tx.rollback()
             # propagate the exception back to api
             raise e
-        finally:
-            tx.close()
 
     @timer_with_counter
     def delete_resource_relation_by_user(self, *,
@@ -1069,8 +1076,6 @@ class Neo4jProxy(BaseProxy):
             if not tx.closed():
                 tx.rollback()
             raise e
-        finally:
-            tx.close()
 
     @timer_with_counter
     def get_dashboard(self,

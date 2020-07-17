@@ -1,3 +1,6 @@
+# Copyright Contributors to the Amundsen project.
+# SPDX-License-Identifier: Apache-2.0
+
 import textwrap
 from typing import Any  # noqa: F401
 
@@ -71,7 +74,7 @@ class Neo4jSearchDataExtractor(Extractor):
         return user.email as email, user.first_name as first_name, user.last_name as last_name,
         user.full_name as full_name, user.github_username as github_username, user.team_name as team_name,
         user.employee_type as employee_type, manager.email as manager_email,
-        user.slack_id as slack_id, user.is_active as is_active,
+        user.slack_id as slack_id, user.is_active as is_active, user.role_name as role_name,
         REDUCE(sum_r = 0, r in COLLECT(DISTINCT read)| sum_r + r.read_count) AS total_read,
         count(distinct b) as total_own,
         count(distinct c) AS total_follow
@@ -79,27 +82,34 @@ class Neo4jSearchDataExtractor(Extractor):
         """
     )
 
-    # todo: 1. change mode to generic once add more support for dashboard
     DEFAULT_NEO4J_DASHBOARD_CYPHER_QUERY = textwrap.dedent(
         """
-        MATCH (db:Dashboard)
-        MATCH (db)-[:DASHBOARD_OF]->(dbg:Dashboardgroup)
+        MATCH (dashboard:Dashboard)
+        {publish_tag_filter}
+        MATCH (dashboard)-[:DASHBOARD_OF]->(dbg:Dashboardgroup)
         MATCH (dbg)-[:DASHBOARD_GROUP_OF]->(cluster:Cluster)
-        OPTIONAL MATCH (db)-[:DESCRIPTION]->(db_descr:Description)
+        OPTIONAL MATCH (dashboard)-[:DESCRIPTION]->(db_descr:Description)
         OPTIONAL MATCH (dbg)-[:DESCRIPTION]->(dbg_descr:Description)
-        OPTIONAL MATCH (db)-[:EXECUTED]->(last_exec:Execution)
+        OPTIONAL MATCH (dashboard)-[:EXECUTED]->(last_exec:Execution)
         WHERE split(last_exec.key, '/')[5] = '_last_successful_execution'
-        OPTIONAL MATCH (db)-[read:READ_BY]->(user:User)
-        OPTIONAL MATCH (db)-[:HAS_QUERY]->(query:Query)
-        with db, dbg, db_descr, dbg_descr, cluster, last_exec, query, SUM(read.read_count) AS total_usage
-        return dbg.name as group_name, db.name as name, cluster.name as cluster,
+        OPTIONAL MATCH (dashboard)-[read:READ_BY]->(user:User)
+        WITH dashboard, dbg, db_descr, dbg_descr, cluster, last_exec, SUM(read.read_count) AS total_usage
+        OPTIONAL MATCH (dashboard)-[:HAS_QUERY]->(query:Query)
+        WITH dashboard, dbg, db_descr, dbg_descr, cluster, last_exec, COLLECT(DISTINCT query.name) as query_names,
+        total_usage
+        OPTIONAL MATCH (dashboard)-[:TAGGED_BY]->(tags:Tag) WHERE tags.tag_type='default'
+        WITH dashboard, dbg, db_descr, dbg_descr, cluster, last_exec, query_names, total_usage,
+        COLLECT(DISTINCT tags.key) as tags
+        OPTIONAL MATCH (dashboard)-[:TAGGED_BY]->(badges:Tag) WHERE badges.tag_type='badge'
+        WITH  dashboard, dbg, db_descr, dbg_descr, cluster, last_exec, query_names, total_usage, tags,
+        COLLECT(DISTINCT badges.key) as badges
+        RETURN dbg.name as group_name, dashboard.name as name, cluster.name as cluster,
         coalesce(db_descr.description, '') as description,
         coalesce(dbg.description, '') as group_description, dbg.dashboard_group_url as group_url,
-        db.dashboard_url as url, db.key as uri,
-        'mode' as product, toInt(last_exec.timestamp) as last_successful_run_timestamp,
-        COLLECT(DISTINCT query.name) as query_names,
-        total_usage
-        order by dbg.name
+        dashboard.dashboard_url as url, dashboard.key as uri,
+        split(dashboard.key, '_')[0] as product, toInteger(last_exec.timestamp) as last_successful_run_timestamp,
+        query_names, total_usage, tags, badges
+        order by dbg.name;
         """
     )
 

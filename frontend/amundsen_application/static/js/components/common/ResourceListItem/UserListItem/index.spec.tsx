@@ -1,3 +1,6 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 
 import { shallow } from 'enzyme';
@@ -6,8 +9,8 @@ import * as Avatar from 'react-avatar';
 import Flag from 'components/common/Flag';
 import { Link } from 'react-router-dom';
 
-import UserListItem, { UserListItemProps } from '.';
 import { ResourceType } from 'interfaces';
+import UserListItem, { UserListItemProps } from '.';
 
 describe('UserListItem', () => {
   const setup = (propOverrides?: Partial<UserListItemProps>) => {
@@ -30,7 +33,7 @@ describe('UserListItem', () => {
         team_name: 'QA',
         user_id: 'test0',
       },
-      ...propOverrides
+      ...propOverrides,
     };
     const wrapper = shallow<UserListItem>(<UserListItem {...props} />);
     return { props, wrapper };
@@ -67,8 +70,12 @@ describe('UserListItem', () => {
 
     it('returns an array of list items for user description', () => {
       const content = wrapper.instance().renderUserInfo(props.user);
-      expect(shallow(content[0]).find('li').text()).toEqual(props.user.role_name);
-      expect(shallow(content[1]).find('li').text()).toEqual(props.user.team_name);
+      expect(shallow(content[0]).find('li').text()).toEqual(
+        props.user.role_name
+      );
+      expect(shallow(content[1]).find('li').text()).toEqual(
+        props.user.team_name
+      );
     });
   });
 
@@ -100,29 +107,56 @@ describe('UserListItem', () => {
       });
 
       it('renders user.name', () => {
-        expect(resourceInfo.children().at(1).children().at(0).text()).toEqual(props.user.display_name);
+        expect(resourceInfo.children().at(1).children().at(0).text()).toEqual(
+          props.user.display_name
+        );
       });
 
       it('calls renderUserInfo with correct props', () => {
-        const renderUserInfoSpy = jest.spyOn(wrapper.instance(), 'renderUserInfo');
+        const renderUserInfoSpy = jest.spyOn(
+          wrapper.instance(),
+          'renderUserInfo'
+        );
         wrapper.instance().forceUpdate();
         expect(renderUserInfoSpy).toHaveBeenCalledWith(props.user);
       });
 
       it('renders ul with list item results of renderUserInfo', () => {
-        const renderUserInfoSpy = jest.spyOn(wrapper.instance(), 'renderUserInfo').mockImplementation(() => {
-          return (<div>Mock Info</div>);
-        });
+        const renderUserInfoSpy = jest
+          .spyOn(wrapper.instance(), 'renderUserInfo')
+          .mockImplementation(() => {
+            return <div>Mock Info</div>;
+          });
         wrapper.instance().forceUpdate();
-        expect(wrapper.find('.resource-info').children().at(1).children().at(1).find('ul').children().html()).toEqual('<div>Mock Info</div>');
+        expect(
+          wrapper
+            .find('.resource-info')
+            .children()
+            .at(1)
+            .children()
+            .at(1)
+            .find('ul')
+            .children()
+            .html()
+        ).toEqual('<div>Mock Info</div>');
       });
 
       it('does not render description if renderUserInfo returns null', () => {
-        const renderUserInfoSpy = jest.spyOn(wrapper.instance(), 'renderUserInfo').mockImplementation(() => {
-          return null;
-        });
+        const renderUserInfoSpy = jest
+          .spyOn(wrapper.instance(), 'renderUserInfo')
+          .mockImplementation(() => {
+            return null;
+          });
         wrapper.instance().forceUpdate();
-        expect(wrapper.find('.resource-info').children().at(1).children().at(1).exists()).toBe(false);
+        expect(
+          wrapper
+            .find('.resource-info')
+            .children()
+            .at(1)
+            .children()
+            .at(1)
+            .exists()
+        ).toBe(false);
       });
     });
 
@@ -152,7 +186,7 @@ describe('UserListItem', () => {
       });
 
       it('renders Alumni flag if user not active', () => {
-        const wrapper = setup({
+        const { wrapper } = setup({
           user: {
             type: ResourceType.user,
             display_name: 'firstname lastname',
@@ -169,8 +203,8 @@ describe('UserListItem', () => {
             slack_id: 'www.slack.com',
             team_name: 'QA',
             user_id: 'test0',
-          }
-        }).wrapper;
+          },
+        });
         const flagComponent = wrapper.find('.resource-badges').find(Flag);
         expect(flagComponent.exists()).toBe(true);
         expect(flagComponent.props()).toMatchObject({
@@ -180,8 +214,10 @@ describe('UserListItem', () => {
       });
 
       it('renders correct end icon', () => {
-        const expectedClassName = 'icon icon-right'
-        expect(resourceBadges.find('img').props().className).toEqual(expectedClassName);
+        const expectedClassName = 'icon icon-right';
+        expect(resourceBadges.find('img').props().className).toEqual(
+          expectedClassName
+        );
       });
     });
   });
@@ -190,7 +226,9 @@ describe('UserListItem', () => {
     it('getLink returns correct string', () => {
       const { props, wrapper } = setup();
       const { user, logging } = props;
-      expect(wrapper.instance().getLink()).toEqual(`/user/${user.user_id}?index=${logging.index}&source=${logging.source}`);
+      expect(wrapper.instance().getLink()).toEqual(
+        `/user/${user.user_id}?index=${logging.index}&source=${logging.source}`
+      );
     });
   });
 });

@@ -1,3 +1,6 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 
 import { indexDashboardsEnabled, indexUsersEnabled } from 'config/config-utils';
@@ -25,7 +28,7 @@ class SearchItemList extends React.Component<SearchItemListProps, {}> {
       default:
         return '';
     }
-  }
+  };
 
   render = () => {
     const { onItemSelect, searchTerm } = this.props;
@@ -37,27 +40,25 @@ class SearchItemList extends React.Component<SearchItemListProps, {}> {
           searchTerm={searchTerm}
           resourceType={ResourceType.table}
         />
-        {
-          indexDashboardsEnabled() &&
+        {indexDashboardsEnabled() && (
           <SearchItem
             listItemText={this.getListItemText(ResourceType.dashboard)}
             onItemSelect={onItemSelect}
             searchTerm={searchTerm}
             resourceType={ResourceType.dashboard}
           />
-        }
-        {
-          indexUsersEnabled() &&
+        )}
+        {indexUsersEnabled() && (
           <SearchItem
             listItemText={this.getListItemText(ResourceType.user)}
             onItemSelect={onItemSelect}
             searchTerm={searchTerm}
             resourceType={ResourceType.user}
           />
-        }
+        )}
       </ul>
     );
-  }
+  };
 }
 
 export default SearchItemList;

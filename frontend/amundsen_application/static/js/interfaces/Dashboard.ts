@@ -1,15 +1,15 @@
 import { User } from 'interfaces/User';
 import { Tag } from 'interfaces/Tags';
 import { TableReader } from 'interfaces/TableMetadata';
-import { TableResource } from 'interfaces/Resources';
+import { TableResource, QueryResource } from 'interfaces/Resources';
 
 export interface DashboardMetadata {
-  badges: Tag[]
-  chart_names: string[]
+  badges: Tag[];
+  chart_names: string[];
   cluster: string;
   created_timestamp: number;
   description: string;
-  frequent_users: TableReader[]
+  frequent_users: TableReader[];
   group_name: string;
   group_url: string;
   last_run_state: string;
@@ -18,7 +18,7 @@ export interface DashboardMetadata {
   name: string;
   owners: User[];
   product: string;
-  query_names: string[];
+  queries: QueryResource[];
   recent_view_count: number;
   tables: TableResource[];
   tags: Tag[];

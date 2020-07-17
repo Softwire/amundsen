@@ -1,3 +1,6 @@
+# Copyright Contributors to the Amundsen project.
+# SPDX-License-Identifier: Apache-2.0
+
 import os
 from typing import Callable, Dict, List, Optional, Set  # noqa: F401
 from amundsen_application.models.user import User
@@ -5,6 +8,15 @@ from amundsen_application.models.user import User
 from flask import Flask  # noqa: F401
 
 from amundsen_application.tests.test_utils import get_test_user
+
+
+class MatchRuleObject:
+    def __init__(self,
+                 schema_regex=None,  # type: str
+                 table_name_regex=None,   # type: str
+                 ) -> None:
+        self.schema_regex = schema_regex
+        self.table_name_regex = table_name_regex
 
 
 class Config:
@@ -21,6 +33,8 @@ class Config:
     COLUMN_STAT_ORDER = None  # type: Dict[str, int]
 
     UNEDITABLE_SCHEMAS = set()  # type: Set[str]
+
+    UNEDITABLE_TABLE_DESCRIPTION_MATCH_RULES = []  # type: List[MatchRuleObject]
 
     # Number of popular tables to be displayed on the index/search page
     POPULAR_TABLE_COUNT = 4  # type: int
@@ -81,6 +95,9 @@ class Config:
     CREDENTIALS_MODE_ADMIN_PASSWORD = os.getenv('CREDENTIALS_MODE_ADMIN_PASSWORD', None)
     MODE_ORGANIZATION = None
     MODE_REPORT_URL_TEMPLATE = None
+    # Add Preview class name below to enable ACL, assuming it is supported by the Preview class
+    # e.g: ACL_ENABLED_DASHBOARD_PREVIEW = {'ModePreview'}
+    ACL_ENABLED_DASHBOARD_PREVIEW = set()  # type: Set[Optional[str]]
 
 
 class LocalConfig(Config):

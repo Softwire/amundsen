@@ -1,3 +1,6 @@
+# Copyright Contributors to the Amundsen project.
+# SPDX-License-Identifier: Apache-2.0
+
 from typing import List, Optional  # noqa: F401
 
 from databuilder.models.elasticsearch_document import ElasticsearchDocument
@@ -7,6 +10,7 @@ class DashboardESDocument(ElasticsearchDocument):
     """
     Schema for the ES dashboard ES document
     """
+
     def __init__(self,
                  group_name,  # type: str
                  name,  # type: str
@@ -20,7 +24,8 @@ class DashboardESDocument(ElasticsearchDocument):
                  url=None,  # type: Optional[str]
                  uri=None,  # type: Optional[str]
                  last_successful_run_timestamp=None,  # type: Optional[int]
-                 tags=None  # type: list
+                 tags=None,  # type: Optional[list[str]]
+                 badges=None,  # type: Optional[list[str]]
                  ):
         # type: (...) -> None
         self.group_name = group_name
@@ -36,3 +41,4 @@ class DashboardESDocument(ElasticsearchDocument):
         self.group_description = group_description
         self.query_names = query_names
         self.tags = tags
+        self.badges = badges

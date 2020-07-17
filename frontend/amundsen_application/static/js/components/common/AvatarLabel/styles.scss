@@ -1,11 +1,14 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 @import 'variables';
 
 .avatar-label-component {
   display: inline-block;
 
   .avatar-label {
-    margin-left: 8px;
     cursor: inherit;
+    margin-left: 8px;
     min-width: 0;
     vertical-align: middle;
   }

@@ -721,56 +721,37 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#testing" class="md-nav__link">
-    Testing
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#python" class="md-nav__link">
-    Python
+  <a href="#testing-python-code" class="md-nav__link">
+    Testing Python Code
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#js-assets" class="md-nav__link">
-    JS Assets
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#type-checking" class="md-nav__link">
-    Type Checking
+  <a href="#testing-frontend-code" class="md-nav__link">
+    Testing Frontend Code
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#lint" class="md-nav__link">
-    Lint
+  <a href="#frontend-type-checking" class="md-nav__link">
+    Frontend Type Checking
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#unit-tests" class="md-nav__link">
-    Unit Tests
+  <a href="#frontend-linting-and-formatting" class="md-nav__link">
+    Frontend Linting and Formatting
   </a>
   
 </li>
         
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
+          <li class="md-nav__item">
+  <a href="#accessibility-and-semantic-markup" class="md-nav__link">
+    Accessibility and Semantic Markup
+  </a>
   
 </li>
         
@@ -1232,56 +1213,37 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#testing" class="md-nav__link">
-    Testing
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#python" class="md-nav__link">
-    Python
+  <a href="#testing-python-code" class="md-nav__link">
+    Testing Python Code
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#js-assets" class="md-nav__link">
-    JS Assets
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#type-checking" class="md-nav__link">
-    Type Checking
+  <a href="#testing-frontend-code" class="md-nav__link">
+    Testing Frontend Code
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#lint" class="md-nav__link">
-    Lint
+  <a href="#frontend-type-checking" class="md-nav__link">
+    Frontend Type Checking
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#unit-tests" class="md-nav__link">
-    Unit Tests
+  <a href="#frontend-linting-and-formatting" class="md-nav__link">
+    Frontend Linting and Formatting
   </a>
   
 </li>
         
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
+          <li class="md-nav__item">
+  <a href="#accessibility-and-semantic-markup" class="md-nav__link">
+    Accessibility and Semantic Markup
+  </a>
   
 </li>
         
@@ -1312,39 +1274,58 @@
                 <h1 id="developer-guide">Developer Guide<a class="headerlink" href="#developer-guide" title="Permanent link">&para;</a></h1>
 <h2 id="environment">Environment<a class="headerlink" href="#environment" title="Permanent link">&para;</a></h2>
 <p>Follow the installation instructions in the section <a href="https://github.com/lyft/amundsenfrontendlibrary/blob/master/docs/installation.md#install-standalone-application-directly-from-the-source">Install standalone application directly from the source</a>.</p>
-<p>Install the javascript development requirements:
+<p>Install the javascript development requirements:</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># in ~/&lt;your-path-to-cloned-repo&gt;/amundsenfrontendlibrary/amundsen_application</span>
 $ <span class="nb">cd</span> static
 $ npm install --only<span class="o">=</span>dev
-</code></pre></div></p>
-<p>To test local changes to the javascript static files:
+</code></pre></div>
+
+<p>To test local changes to the javascript static files:</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># in ~/&lt;your-path-to-cloned-repo&gt;/amundsenfrontendlibrary/amundsen_application</span>
 $ <span class="nb">cd</span> static
 $ npm run dev-build <span class="c1"># builds the development bundle</span>
-</code></pre></div></p>
-<p>To test local changes to the python files, re-run the wsgi:
+</code></pre></div>
+
+<p>To test local changes to the python files, re-run the wsgi:</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># in ~/&lt;your-path-to-cloned-repo&gt;/amundsenfrontendlibrary/amundsen_application</span>
 $ python3 wsgi.py
-</code></pre></div></p>
+</code></pre></div>
+
 <h2 id="contributing">Contributing<a class="headerlink" href="#contributing" title="Permanent link">&para;</a></h2>
-<h3 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h3>
-<h4 id="python">Python<a class="headerlink" href="#python" title="Permanent link">&para;</a></h4>
-<p>If changes were made to any python files, run the python unit tests, linter, and type checker. Unit tests are run with <code>py.test</code>. They are located in <code>tests/unit</code>. Type checks are run with <code>mypy</code>. Linting is <code>flake8</code>. There are friendly <code>make</code> targets for each of these tests:
-<div class="highlight"><pre><span></span><code><span class="c1"># after setting up environment</span>
+<p>We describe our <a href="https://lyft.github.io/amundsen/CONTRIBUTING/">general contributing process</a> in the main repository of Amundsen, so here we&rsquo;ll cover the items specific to the Frontend library.</p>
+<h3 id="testing-python-code">Testing Python Code<a class="headerlink" href="#testing-python-code" title="Permanent link">&para;</a></h3>
+<p>If changes were made to any python files, run the python unit tests, linter, and type checker. Unit tests are run with <code>py.test</code>. They are located in <code>tests/unit</code>. Type checks are run with <code>mypy</code>. Linting is <code>flake8</code>. There are friendly <code>make</code> targets for each of these tests:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># after setting up the environment</span>
 make <span class="nb">test</span>  <span class="c1"># unit tests in Python 3</span>
 make lint  <span class="c1"># flake8</span>
 make mypy  <span class="c1"># type checks</span>
 </code></pre></div>
-Fix all errors before submitting a PR.</p>
-<h4 id="js-assets">JS Assets<a class="headerlink" href="#js-assets" title="Permanent link">&para;</a></h4>
-<h5 id="type-checking">Type Checking<a class="headerlink" href="#type-checking" title="Permanent link">&para;</a></h5>
-<p><code>npm run tsc</code> conducts type checking. The build commands <code>npm run build</code> and <code>npm run dev-build</code> also conduct type checking, but are slower because they also build the source code. Run any of these commands and fix all failed checks before submitting a PR.</p>
-<h5 id="lint">Lint<a class="headerlink" href="#lint" title="Permanent link">&para;</a></h5>
-<p><code>npm run lint</code> runs the linter. Fix all lint errors before submitting a PR. <code>npm run lint-fix</code> can help auto-fix most common errors.</p>
-<h5 id="unit-tests">Unit Tests<a class="headerlink" href="#unit-tests" title="Permanent link">&para;</a></h5>
-<p><code>npm run test</code> runs unit tests. Add unit tests to cover new code additions and fix any test failures before submitting a PR.</p>
-<p>To run specific tests, run <code>npm run test-nocov -t &lt;regex&gt;</code>, where <code>&lt;regex&gt;</code> is any pattern that matches the names of the test blocks that you want to run.</p>
-<p>See our recommendations for writing unit tests <a href="https://github.com/lyft/amundsenfrontendlibrary/blob/master/docs/recommended_practices.md">here</a>.</p>
+
+<p>Fix all errors before submitting a PR.</p>
+<h3 id="testing-frontend-code">Testing Frontend Code<a class="headerlink" href="#testing-frontend-code" title="Permanent link">&para;</a></h3>
+<p><code>npm run test</code> runs our Frontend unit tests. Please add unit tests to cover new code additions and fix any test failures before submitting a PR. You can also have a dedicated terminal running <code>npm run test:watch</code> while developing, which would continuously run tests over your modified files.</p>
+<p>To run specific tests, run <code>npm run test-nocov -t &lt;regex&gt;</code>, where <code>&lt;regex&gt;</code> is any pattern that matches the names of the test blocks that you want to run. See our <a href="https://github.com/lyft/amundsenfrontendlibrary/blob/master/docs/recommended_practices.md">recommendations for writing unit tests</a>.</p>
+<h3 id="frontend-type-checking">Frontend Type Checking<a class="headerlink" href="#frontend-type-checking" title="Permanent link">&para;</a></h3>
+<p>We use TypeScript in our codebase, so <code>npm run tsc</code> conducts type checking. The build commands <code>npm run build</code> and <code>npm run dev-build</code> also conduct type checking, but are slower because they also build the source code. Run any of these commands and fix all failed checks before submitting a PR.</p>
+<h3 id="frontend-linting-and-formatting">Frontend Linting and Formatting<a class="headerlink" href="#frontend-linting-and-formatting" title="Permanent link">&para;</a></h3>
+<p>We have in place two linters – <a href="https://eslint.org/">ESLint</a> for our JavaScript and TypeScript files, <a href="https://stylelint.io/">Stylelint</a> for our Sass files. If you have both ESLint and Stylelint extensions installed on your IDE, you should get warnings on your editor by default.</p>
+<p>We also use <a href="https://prettier.io/">Prettier</a> to help us keep consistent formatting on our TypeScript and Sass code.</p>
+<p>Whenever you want to run these tasks manually, you can execute:</p>
+<ul>
+<li><code>npm run lint</code> to run ESLint and <code>npm run lint-fix</code> to auto-fix most of them.</li>
+<li><code>npm run stylelint</code> to run Stylelint and <code>npm run stylelint-fix</code> to trigger the auto-fix.</li>
+<li><code>npm run format</code> to run Prettier on both the TypeScript and Sass files</li>
+</ul>
+<p>We also check your changed files and format them when you create a new commit, making it easy for you and for the project to keep a consistent code style. We do this leveraging <a href="https://github.com/typicode/husky">Husky</a> and <a href="https://github.com/okonet/lint-staged">Lint-staged</a>.</p>
+<p>Looking forward, we aim at setting more strict best practices using ESLint and Stylelint. You can read about our plans to improve our TypeScript, Styles and general code style on these issues:</p>
+<ul>
+<li><a href="https://github.com/lyft/amundsen/issues/503">Adopt Typescript Recommended Guidelines on the Frontend library</a></li>
+<li><a href="https://github.com/lyft/amundsen/issues/501">Adopt Stylelint&rsquo;s Sass Guidelines on the Frontend library</a></li>
+<li><a href="https://github.com/lyft/amundsen/issues/502">Adopt Airbnb-Typescript Code Guidelines on the Frontend library</a></li>
+</ul>
+<h3 id="accessibility-and-semantic-markup">Accessibility and Semantic Markup<a class="headerlink" href="#accessibility-and-semantic-markup" title="Permanent link">&para;</a></h3>
+<p>We strive to keep our application accessible. For that, we use the &lsquo;airbnb-typescript&rsquo; preset for ESLint, which includes a bunch of accessibility rules. We also have a set of &ldquo;jsx-a11y/&rdquo; prefixed rules, which are currently on a &ldquo;warn&rdquo; level, so they don&rsquo;t throw errors. Our goal is to remove that &ldquo;warn&rdquo; level and comply with all the accessibility rules we list on <a href="https://github.com/lyft/amundsenfrontendlibrary/blob/master/amundsen_application/static/package.json#L242">our ESLint configuration</a>.</p>
+<p>We also try to model our application&rsquo;s markup on best practices regarding semantic markup. If you are making large markup changes on one of your PRs, make sure your changes comply with this <a href="https://learn-the-web.algonquindesign.ca/topics/html-semantics-checklist/">HTML semantics checklist</a>.</p>
                 
                   
                 

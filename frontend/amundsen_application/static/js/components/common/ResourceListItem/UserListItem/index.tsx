@@ -1,11 +1,13 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 import * as Avatar from 'react-avatar';
 import { Link } from 'react-router-dom';
 
-import { LoggingParams } from '../types';
-
 import { UserResource } from 'interfaces';
 import Flag from 'components/common/Flag';
+import { LoggingParams } from '../types';
 
 export interface UserListItemProps {
   user: UserResource;
@@ -25,11 +27,11 @@ class UserListItem extends React.Component<UserListItemProps, {}> {
     }
 
     const listItems = [];
-    if (!!role_name) {
-      listItems.push((<li key={`${user_id}:role_name`}>{role_name}</li>));
+    if (role_name) {
+      listItems.push(<li key={`${user_id}:role_name`}>{role_name}</li>);
     }
-    if (!!team_name) {
-      listItems.push((<li key={`${user_id}:team_name`}>{team_name}</li>));
+    if (team_name) {
+      listItems.push(<li key={`${user_id}:team_name`}>{team_name}</li>);
     }
     return listItems;
   };
@@ -39,32 +41,22 @@ class UserListItem extends React.Component<UserListItemProps, {}> {
     const userInfo = this.renderUserInfo(user);
     return (
       <li className="list-group-item clickable">
-        <Link className="resource-list-item user-list-item" to={ this.getLink() }>
+        <Link className="resource-list-item user-list-item" to={this.getLink()}>
           <div className="resource-info">
-            <Avatar name={ user.display_name } size={ 24 } round={ true } />
+            <Avatar name={user.display_name} size={24} round />
             <div className="resource-info-text my-auto">
-              <div className="resource-name title-2">
-                { user.display_name }
-              </div>
-              {
-                userInfo &&
+              <div className="resource-name title-2">{user.display_name}</div>
+              {userInfo && (
                 <div className="body-secondary-3 truncated">
-                  <ul>
-                    { userInfo}
-                  </ul>
+                  <ul>{userInfo}</ul>
                 </div>
-              }
+              )}
             </div>
           </div>
-          <div className="resource-type">
-            User
-          </div>
+          <div className="resource-type">User</div>
           <div className="resource-badges">
-            {
-              !user.is_active &&
-              <Flag text="Alumni" labelStyle='danger' />
-            }
-            <img className="icon icon-right" />
+            {!user.is_active && <Flag text="Alumni" labelStyle="danger" />}
+            <img className="icon icon-right" alt="" />
           </div>
         </Link>
       </li>

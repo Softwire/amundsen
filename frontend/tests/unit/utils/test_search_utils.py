@@ -1,3 +1,6 @@
+# Copyright Contributors to the Amundsen project.
+# SPDX-License-Identifier: Apache-2.0
+
 import unittest
 
 from amundsen_application.api.utils.search_utils import generate_query_json, has_filters, transform_filters
@@ -32,7 +35,8 @@ class SearchUtilsTest(unittest.TestCase):
         Verify that the given filters are correctly transformed
         :return:
         """
-        self.assertEqual(transform_filters(filters=self.test_filters), self.expected_transformed_filters)
+        self.assertEqual(transform_filters(filters=self.test_filters, resource='table'),
+                         self.expected_transformed_filters)
 
     def test_generate_query_json(self) -> None:
         """
@@ -54,13 +58,13 @@ class SearchUtilsTest(unittest.TestCase):
         Returns true if called with a dictionary that has values for a valid filter category
         :return:
         """
-        self.assertTrue(has_filters(filters=self.expected_transformed_filters))
+        self.assertTrue(has_filters(filters=self.expected_transformed_filters, resource='table'))
 
     def test_has_filters_return_false(self) -> None:
         """
         Returns false if called with a dictionary that has no values for a valid filter category
         :return:
         """
-        self.assertFalse(has_filters(filters={'fake_category': ['db1']}))
-        self.assertFalse(has_filters(filters={'tag': []}))
+        self.assertFalse(has_filters(filters={'fake_category': ['db1']}, resource='table'))
+        self.assertFalse(has_filters(filters={'tag': []}, resource='table'))
         self.assertFalse(has_filters())

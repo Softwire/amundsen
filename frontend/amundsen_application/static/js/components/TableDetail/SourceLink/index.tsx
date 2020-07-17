@@ -1,3 +1,6 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 
 import { logClick } from 'ducks/utilMethods';
@@ -8,19 +11,23 @@ export interface SourceLinkProps {
   tableSource: TableSource;
 }
 
-const SourceLink: React.SFC<SourceLinkProps> = ({ tableSource }) => {
+const SourceLink: React.SFC<SourceLinkProps> = ({
+  tableSource,
+}: SourceLinkProps) => {
   if (tableSource === null || tableSource.source === null) return null;
 
-  const image = (tableSource.source_type === 'github')? '/static/images/github.png': '';
+  const image =
+    tableSource.source_type === 'github' ? '/static/images/github.png' : '';
   return (
     <a
       className="header-link"
-      href={ tableSource.source }
+      href={tableSource.source}
       id="explore-source"
-      onClick={ logClick }
-      target='_blank'
+      onClick={logClick}
+      target="_blank"
+      rel="noreferrer"
     >
-      <AvatarLabel label={ tableSource.source_type } src={ image }/>
+      <AvatarLabel label={tableSource.source_type} src={image} />
     </a>
   );
 };

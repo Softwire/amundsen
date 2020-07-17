@@ -1,3 +1,6 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 @import 'variables';
 
 .announcement-container hr {
@@ -10,8 +13,8 @@
   margin-bottom: 32px;
 
   .post-header {
-    padding-right: 16px;
     border-right: 1px solid $stroke;
+    padding-right: 16px;
 
     .post-title {
       width: 150px;

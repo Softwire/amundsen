@@ -1,3 +1,6 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 
@@ -23,7 +26,10 @@ export interface EditableSectionChildProps {
   setEditMode?: (isEditing: boolean) => void;
 }
 
-export class EditableSection extends React.Component<EditableSectionProps, EditableSectionState> {
+export class EditableSection extends React.Component<
+  EditableSectionProps,
+  EditableSectionState
+> {
   static defaultProps: Partial<EditableSectionProps> = {
     editText: Constants.EDIT_TEXT,
   };
@@ -33,7 +39,7 @@ export class EditableSection extends React.Component<EditableSectionProps, Edita
 
     this.state = {
       isEditing: false,
-    }
+    };
   }
 
   setEditMode = (isEditing: boolean) => {
@@ -45,32 +51,54 @@ export class EditableSection extends React.Component<EditableSectionProps, Edita
   };
 
   static convertText(str: string): string {
-    return str.split(new RegExp('[\\s+_]')).map(x => x.charAt(0).toUpperCase() + x.slice(1).toLowerCase()).join(" ");
+    return str
+      .split(new RegExp('[\\s+_]'))
+      .map((x) => x.charAt(0).toUpperCase() + x.slice(1).toLowerCase())
+      .join(' ');
   }
 
   renderButton = (): React.ReactNode => {
-     return (
-       <button className={`btn btn-flat-icon edit-button ${(this.state.isEditing ? 'active': '')}`} onClick={ this.toggleEdit }>
-         <img className={`icon icon-small icon-edit ${(this.state.isEditing ? 'icon-color' : '')}`} />
-       </button>
-     );
+    return (
+      <button
+        className={`btn btn-flat-icon edit-button ${
+          this.state.isEditing ? 'active' : ''
+        }`}
+        onClick={this.toggleEdit}
+      >
+        <span className="sr-only">{Constants.EDIT_TEXT}</span>
+        <img
+          className={`icon icon-small icon-edit ${
+            this.state.isEditing ? 'icon-color' : ''
+          }`}
+          alt=""
+        />
+      </button>
+    );
   };
 
   renderReadOnlyButton = (): React.ReactNode => {
     const { editText, editUrl } = this.props;
-    const popoverHoverFocus = (<Popover id="popover-trigger-hover-focus">{ editText }</Popover>);
+    const popoverHoverFocus = (
+      <Popover id="popover-trigger-hover-focus">{editText}</Popover>
+    );
 
     if (!editUrl) {
       return null;
     }
     return (
       <OverlayTrigger
-       trigger={["hover", "focus"]}
-       placement="top"
-       overlay={popoverHoverFocus}
+        trigger={['hover', 'focus']}
+        placement="top"
+        overlay={popoverHoverFocus}
       >
-        <a className="btn btn-flat-icon-dark edit-button" href={ editUrl } target="_blank" rel="noopener noreferrer">
-          <img className="icon icon-small icon-edit" />
+        <a
+          className="btn btn-flat-icon-dark edit-button"
+          href={editUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span className="sr-only">{Constants.EDIT_TEXT}</span>
+          <img className="icon icon-small icon-edit" alt="" />
         </a>
       </OverlayTrigger>
     );
@@ -78,23 +106,30 @@ export class EditableSection extends React.Component<EditableSectionProps, Edita
 
   render() {
     const { title, readOnly = false } = this.props;
-    const childrenWithProps = !readOnly ? React.Children.map(this.props.children, child => {
-      if (!React.isValidElement(child)) {
-        return child;
-      }
-      return React.cloneElement(child, {
-        isEditing: this.state.isEditing,
-        setEditMode: this.setEditMode,
-      });
-    }) : this.props.children;
+    const childrenWithProps = !readOnly
+      ? React.Children.map(this.props.children, (child) => {
+          if (!React.isValidElement(child)) {
+            return child;
+          }
+
+          return React.cloneElement(child, {
+            isEditing: this.state.isEditing,
+            setEditMode: this.setEditMode,
+          });
+        })
+      : this.props.children;
 
     return (
       <section className="editable-section">
-        <div className="section-title title-3">
-          { EditableSection.convertText(title) }
-          { !readOnly ? this.renderButton() : this.renderReadOnlyButton() }
-        </div>
-        { childrenWithProps }
+        <label className="editable-section-label">
+          <div className="editable-section-label-wrapper">
+            <span className="section-title title-3">
+              {EditableSection.convertText(title)}
+            </span>
+            {!readOnly ? this.renderButton() : this.renderReadOnlyButton()}
+          </div>
+          <div className="editable-section-content">{childrenWithProps}</div>
+        </label>
       </section>
     );
   }

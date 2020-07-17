@@ -1,3 +1,6 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -17,40 +20,34 @@ export interface MapDispatchToProps {
   loadPreviousSearch: () => LoadPreviousSearchRequest;
 }
 
-type BreadcrumbDirection = "left" | "right";
+type BreadcrumbDirection = 'left' | 'right';
 
 export type BreadcrumbProps = OwnProps & MapDispatchToProps;
 
-export const Breadcrumb: React.SFC<BreadcrumbProps> = (props) => {
-  const { direction = "left", path, text } = props;
+export const Breadcrumb: React.SFC<BreadcrumbProps> = (
+  props: BreadcrumbProps
+) => {
+  const { direction = 'left', path, text } = props;
   if (path !== undefined && text !== undefined) {
     return (
       <div className="amundsen-breadcrumb">
-        <Link to={path} className='btn btn-flat-icon title-3'>
-          {
-            direction === "left" &&
-            <img className='icon icon-left'/>
-          }
+        <Link to={path} className="btn btn-flat-icon title-3">
+          {direction === 'left' && <img className="icon icon-left" alt="" />}
           <span>{text}</span>
-          {
-            direction === "right" &&
-            <img className='icon icon-right'/>
-          }
+          {direction === 'right' && <img className="icon icon-right" alt="" />}
         </Link>
       </div>
     );
   }
   return (
     <div className="amundsen-breadcrumb">
-      <a onClick={ props.loadPreviousSearch } className='btn btn-flat-icon title-3'>
-        {
-          direction === "left" &&
-          <img className='icon icon-left'/>
-        }
-        {
-          direction === "right" &&
-          <img className='icon icon-right'/>
-        }
+      {/* eslint-disable jsx-a11y/anchor-is-valid */}
+      <a
+        onClick={props.loadPreviousSearch}
+        className="btn btn-flat-icon title-3"
+      >
+        {direction === 'left' && <img className="icon icon-left" alt="" />}
+        {direction === 'right' && <img className="icon icon-right" alt="" />}
       </a>
     </div>
   );
@@ -60,4 +57,7 @@ export const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({ loadPreviousSearch }, dispatch);
 };
 
-export default connect<{}, MapDispatchToProps>(null, mapDispatchToProps)(Breadcrumb);
+export default connect<{}, MapDispatchToProps>(
+  null,
+  mapDispatchToProps
+)(Breadcrumb);

@@ -1,7 +1,8 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-
-import { LoggingParams } from '../types';
 
 import { ResourceType, TableResource } from 'interfaces';
 
@@ -11,6 +12,7 @@ import { getSourceDisplayName, getSourceIconClass } from 'config/config-utils';
 
 import BadgeList from 'components/common/BadgeList';
 import SchemaInfo from 'components/common/ResourceListItem/SchemaInfo';
+import { LoggingParams } from '../types';
 
 export interface TableListItemProps {
   table: TableResource;
@@ -20,11 +22,17 @@ export interface TableListItemProps {
 class TableListItem extends React.Component<TableListItemProps, {}> {
   getLink = () => {
     const { table, logging } = this.props;
-    return `/table_detail/${table.cluster}/${table.database}/${table.schema}/${table.name}`
-      + `?index=${logging.index}&source=${logging.source}`;
+
+    return (
+      `/table_detail/${table.cluster}/${table.database}/${table.schema}/${table.name}` +
+      `?index=${logging.index}&source=${logging.source}`
+    );
   };
 
-  generateResourceIconClass = (databaseId: string, resource: ResourceType): string => {
+  generateResourceIconClass = (
+    databaseId: string,
+    resource: ResourceType
+  ): string => {
     return `icon resource-icon ${getSourceIconClass(databaseId, resource)}`;
   };
 
@@ -33,36 +41,51 @@ class TableListItem extends React.Component<TableListItemProps, {}> {
 
     return (
       <li className="list-group-item clickable">
-        <Link className="resource-list-item table-list-item" to={ this.getLink() }>
+        <Link
+          className="resource-list-item table-list-item"
+          to={this.getLink()}
+        >
           <div className="resource-info">
-            <span className={this.generateResourceIconClass(table.database, table.type)} />
+            <span
+              className={this.generateResourceIconClass(
+                table.database,
+                table.type
+              )}
+            />
             <div className="resource-info-text my-auto">
               <div className="resource-name title-2">
                 <div className="truncated">
-                  {
-                    table.schema_description &&
-                    <SchemaInfo schema={ table.schema } table = { table.name } desc={ table.schema_description }/>
-                  }
-                  { !table.schema_description && `${table.schema}.${table.name}` }
+                  {table.schema_description && (
+                    <SchemaInfo
+                      schema={table.schema}
+                      table={table.name}
+                      desc={table.schema_description}
+                    />
+                  )}
+                  {!table.schema_description && `${table.schema}.${table.name}`}
                 </div>
-                <BookmarkIcon bookmarkKey={ table.key } resourceType={ table.type } />
+                <BookmarkIcon
+                  bookmarkKey={table.key}
+                  resourceType={table.type}
+                />
               </div>
-              <div className="body-secondary-3 truncated">{ table.description }</div>
+              <div className="body-secondary-3 truncated">
+                {table.description}
+              </div>
             </div>
           </div>
           <div className="resource-type">
-            { getSourceDisplayName(table.database, table.type) }
+            {getSourceDisplayName(table.database, table.type)}
           </div>
           <div className="resource-badges">
-            {
-              !!table.badges && table.badges.length > 0 &&
+            {!!table.badges && table.badges.length > 0 && (
               <div>
                 <div className="body-secondary-3">
-                <BadgeList badges={ table.badges } />
+                  <BadgeList badges={table.badges} />
                 </div>
               </div>
-            }
-            <img className="icon icon-right" />
+            )}
+            <img className="icon icon-right" alt="" />
           </div>
         </Link>
       </li>

@@ -2,7 +2,7 @@ Table search
 This is used by the frontend API to search table information.
 ---
 tags:
-  - 'search'
+  - 'search_table'
 paths:
   /search_table:
     post:
@@ -15,11 +15,10 @@ paths:
             schema:
               type: object
               properties:
+                index:
+                  type: string
                 page_index:
                   type: integer
-                  schema:
-                    type: integer
-                    default: 0
                 query_term:
                   type: string
                 search_request:

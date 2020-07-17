@@ -1,3 +1,6 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 @import 'variables';
 
 .column-stats {
@@ -20,8 +23,8 @@
       }
 
       .column-stat-row {
-        display: flex;
         border-top: 1px solid $divider;
+        display: flex;
         line-height: 32px;
 
         &:nth-child(odd) {

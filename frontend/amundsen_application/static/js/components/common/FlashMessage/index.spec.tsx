@@ -1,3 +1,6 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 
 import { shallow } from 'enzyme';
@@ -10,7 +13,7 @@ describe('FlashMessage', () => {
       iconClass: null,
       message: 'Test',
       onClose: jest.fn(),
-      ...propOverrides
+      ...propOverrides,
     };
     const wrapper = shallow(<FlashMessage {...props} />);
     return { props, wrapper };
@@ -31,10 +34,10 @@ describe('FlashMessage', () => {
       });
 
       it('if iconClass, renders img with correct className', () => {
-        const testClass = 'icon-mail'
-        const wrapper = setup({iconClass: testClass}).wrapper;
+        const testClass = 'icon-mail';
+        const { wrapper } = setup({ iconClass: testClass });
         expect(wrapper.find('img').props()).toMatchObject({
-          className: `icon ${testClass}`
+          className: `icon ${testClass}`,
         });
       });
     });
@@ -44,7 +47,9 @@ describe('FlashMessage', () => {
     });
 
     it('renders correct button', () => {
-      expect(wrapper.find('button.btn.btn-close').props().onClick).toBe(props.onClose);
+      expect(wrapper.find('button.btn.btn-close').props().onClick).toBe(
+        props.onClose
+      );
     });
   });
 });

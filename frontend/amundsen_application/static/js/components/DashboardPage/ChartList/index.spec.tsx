@@ -1,8 +1,11 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 
 import { shallow } from 'enzyme';
 
-import ChartList, { ChartListProps } from './';
+import ChartList, { ChartListProps } from '.';
 
 describe('ChartList', () => {
   const setup = (propOverrides?: Partial<ChartListProps>) => {
@@ -10,7 +13,7 @@ describe('ChartList', () => {
       charts: [],
       ...propOverrides,
     };
-    const wrapper = shallow<ChartList>(<ChartList {...props} />)
+    const wrapper = shallow<ChartList>(<ChartList {...props} />);
     return { props, wrapper };
   };
 

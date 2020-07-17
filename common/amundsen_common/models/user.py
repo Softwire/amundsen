@@ -1,3 +1,6 @@
+# Copyright Contributors to the Amundsen project.
+# SPDX-License-Identifier: Apache-2.0
+
 from typing import Optional, Dict
 
 import attr
@@ -35,6 +38,7 @@ class User:
     manager_id: Optional[str] = None
     role_name: Optional[str] = None
     profile_url: Optional[str] = None
+    other_key_values: Optional[Dict[str, str]] = attr.ib(factory=dict)
     # TODO: Add frequent_used, bookmarked, & owned resources
 
 

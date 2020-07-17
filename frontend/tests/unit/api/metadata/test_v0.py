@@ -1,3 +1,6 @@
+# Copyright Contributors to the Amundsen project.
+# SPDX-License-Identifier: Apache-2.0
+
 import json
 import responses
 import unittest
@@ -61,6 +64,7 @@ class MetadataTest(unittest.TestCase):
             'schema': 'test_schema',
             'name': 'test_table',
             'description': 'This is a test',
+            'resource_reports': [],
             'programmatic_descriptions': [
                 {'source': 'c_1', 'text': 'description c'},
                 {'source': 'a_1', 'text': 'description a'},
@@ -136,6 +140,7 @@ class MetadataTest(unittest.TestCase):
                     'text': 'description c'
                 },
             ],
+            'resource_reports': [],
             'table_writer': {
                 'application_url': 'https://test-test.test.test',
                 'name': 'test_name',
@@ -266,10 +271,10 @@ class MetadataTest(unittest.TestCase):
             'github_username': 'githubusername',
             'is_active': True,
             'last_name': 'Lastname',
-            'manager_email': 'manager@email.com',
+            'manager_email': None,
             'manager_fullname': 'Manager Fullname',
             'manager_id': 'managerid',
-            'profile_url': 'https://test-profile-url.com',
+            'profile_url': '',
             'role_name': 'SWE',
             'slack_id': 'slackuserid',
             'team_name': 'Amundsen',
@@ -832,7 +837,7 @@ class MetadataTest(unittest.TestCase):
             response = test.get('/api/metadata/v0/user', query_string=dict(user_id='testuser'))
             data = json.loads(response.data)
             self.assertEquals(response.status_code, HTTPStatus.OK)
-            self.assertCountEqual(data.get('user'), self.expected_parsed_user)
+            self.assertDictContainsSubset(self.expected_parsed_user, data.get('user'))
 
     @responses.activate
     def test_get_bookmark(self) -> None:
@@ -1036,8 +1041,8 @@ class MetadataTest(unittest.TestCase):
             )
             self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
             expected = {
-                'dashboards': {},
-                'msg': 'Encountered error: Related Dashboard Metadata request failed',
+                'dashboards': [],
+                'msg': 'Encountered 400 Error: Related dashboard metadata request failed',
                 'status_code': 400
             }
             self.assertEqual(response.json, expected)

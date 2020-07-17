@@ -1,10 +1,13 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 
 import { shallow } from 'enzyme';
 import CheckBoxItem, { CheckBoxItemProps } from '.';
 
 describe('CheckBoxItem', () => {
-  const expectedChild = (<span>I am a child</span>);
+  const expectedChild = <span>I am a child</span>;
   const setup = (propOverrides?: Partial<CheckBoxItemProps>) => {
     const props: CheckBoxItemProps = {
       checked: true,
@@ -12,12 +15,11 @@ describe('CheckBoxItem', () => {
       name: 'test',
       value: 'testMethod',
       onChange: jest.fn(),
-      ...propOverrides
+      children: <div />,
+      ...propOverrides,
     };
     const wrapper = shallow(
-      <CheckBoxItem {...props}>
-        { expectedChild }
-      </CheckBoxItem>
+      <CheckBoxItem {...props}>{expectedChild}</CheckBoxItem>
     );
     return { props, wrapper };
   };
@@ -49,17 +51,17 @@ describe('CheckBoxItem', () => {
         disabled: props.disabled,
         name: props.name,
         onChange: props.onChange,
-        value: props.value
+        value: props.value,
       });
     });
 
     it('renders input with default value for checked if not provided', () => {
-      const wrapper = setup({ checked: undefined }).wrapper;
+      const { wrapper } = setup({ checked: undefined });
       expect(wrapper.find('input').props().checked).toEqual(false);
     });
 
     it('renders input with default value for disabled if not provided', () => {
-      const wrapper = setup({ disabled: undefined }).wrapper;
+      const { wrapper } = setup({ disabled: undefined });
       expect(wrapper.find('input').props().disabled).toEqual(false);
     });
 

@@ -2,6 +2,13 @@ import { expectSaga, testSaga } from 'redux-saga-test-plan';
 import * as matchers from 'redux-saga-test-plan/matchers';
 import { throwError } from 'redux-saga-test-plan/providers';
 
+import { ResourceType, Tag, UpdateMethod, UpdateTagData } from 'interfaces';
+import globalState from 'fixtures/globalState';
+import {
+  getTableData,
+  getTableDataFailure,
+  getTableDataSuccess,
+} from 'ducks/tableMetadata/reducer';
 import * as API from '../api/v0';
 import reducer, {
   getAllTags,
@@ -14,20 +21,13 @@ import reducer, {
   updateTagsSuccess,
 } from '../reducer';
 
-
-import { getAllTagsWatcher, getAllTagsWorker, updateResourceTagsWatcher, updateResourceTagsWorker } from '../sagas';
+import {
+  getAllTagsWatcher,
+  getAllTagsWorker,
+  updateResourceTagsWatcher,
+  updateResourceTagsWorker,
+} from '../sagas';
 import { GetAllTags, UpdateTags } from '../types';
-
-
-import { ResourceType, Tag, UpdateMethod, UpdateTagData } from 'interfaces';
-
-import globalState from 'fixtures/globalState';
-
-
-import { getTableData, getTableDataFailure, getTableDataSuccess } from 'ducks/tableMetadata/reducer';
-
-const updateTableTagSpy = jest.spyOn(API, 'updateTableTag').mockImplementation((payload, type, key) => null);
-
 
 describe('allTags ducks', () => {
   describe('actions', () => {
@@ -44,7 +44,10 @@ describe('allTags ducks', () => {
     });
 
     it('getAllTagsSuccess - returns the action to process success', () => {
-      const expectedTags = [{tag_count: 2, tag_name: 'test'}, {tag_count: 1, tag_name: 'test2'}];
+      const expectedTags = [
+        { tag_count: 2, tag_name: 'test' },
+        { tag_count: 1, tag_name: 'test2' },
+      ];
       const action = getAllTagsSuccess(expectedTags);
       const { payload } = action;
       expect(action.type).toBe(GetAllTags.SUCCESS);
@@ -63,7 +66,7 @@ describe('allTags ducks', () => {
         resourceTags: {
           isLoading: false,
           tags: [],
-        }
+        },
       };
     });
     it('should return the existing state if action is not handled', () => {
@@ -79,12 +82,15 @@ describe('allTags ducks', () => {
         resourceTags: {
           isLoading: false,
           tags: [],
-        }
+        },
       });
     });
 
     it('should handle GetAllTags.SUCCESS', () => {
-      const expectedTags = [{tag_count: 2, tag_name: 'test'}, {tag_count: 1, tag_name: 'test2'}];
+      const expectedTags = [
+        { tag_count: 2, tag_name: 'test' },
+        { tag_count: 1, tag_name: 'test2' },
+      ];
       expect(reducer(testState, getAllTagsSuccess(expectedTags))).toEqual({
         allTags: {
           isLoading: false,
@@ -93,7 +99,7 @@ describe('allTags ducks', () => {
         resourceTags: {
           isLoading: false,
           tags: [],
-        }
+        },
       });
     });
 
@@ -106,18 +112,21 @@ describe('allTags ducks', () => {
     describe('getAllTagsWatcher', () => {
       it('takes GetAllTags.REQUEST with getAllTagsWorker', () => {
         testSaga(getAllTagsWatcher)
-          .next().takeEvery(GetAllTags.REQUEST, getAllTagsWorker)
-          .next().isDone();
+          .next()
+          .takeEvery(GetAllTags.REQUEST, getAllTagsWorker)
+          .next()
+          .isDone();
       });
     });
 
     describe('getAllTagsWorker', () => {
       it('gets allTags', () => {
-        const mockTags = [{tag_count: 2, tag_name: 'test'}, {tag_count: 1, tag_name: 'test2'}];
+        const mockTags = [
+          { tag_count: 2, tag_name: 'test' },
+          { tag_count: 1, tag_name: 'test2' },
+        ];
         return expectSaga(getAllTagsWorker)
-          .provide([
-            [matchers.call.fn(API.getAllTags), mockTags],
-          ])
+          .provide([[matchers.call.fn(API.getAllTags), mockTags]])
           .put(getAllTagsSuccess(mockTags))
           .run();
       });
@@ -134,18 +143,20 @@ describe('allTags ducks', () => {
   });
 });
 
-
 describe('tags ducks', () => {
   let expectedTags: Tag[];
   let updatePayload: UpdateTagData[];
   beforeAll(() => {
-    expectedTags = [{tag_count: 2, tag_name: 'test'}, {tag_count: 1, tag_name: 'test2'}];
-    updatePayload = [{methodName: UpdateMethod.PUT, tagName: 'test'}];
+    expectedTags = [
+      { tag_count: 2, tag_name: 'test' },
+      { tag_count: 1, tag_name: 'test2' },
+    ];
+    updatePayload = [{ methodName: UpdateMethod.PUT, tagName: 'test' }];
   });
 
   describe('actions', () => {
     it('updateTags - returns the action to updateTags', () => {
-      const action = updateTags(updatePayload, ResourceType.table, "test");
+      const action = updateTags(updatePayload, ResourceType.table, 'test');
       const { payload } = action;
       expect(action.type).toBe(UpdateTags.REQUEST);
       expect(payload.tagArray).toBe(updatePayload);
@@ -176,12 +187,17 @@ describe('tags ducks', () => {
     });
 
     it('should handle UpdateTags.REQUEST', () => {
-      expect(reducer(testState, updateTags(updatePayload, ResourceType.table, "test"))).toEqual({
+      expect(
+        reducer(
+          testState,
+          updateTags(updatePayload, ResourceType.table, 'test')
+        )
+      ).toEqual({
         ...testState,
         resourceTags: {
           ...testState.resourceTags,
           isLoading: true,
-        }
+        },
       });
     });
 
@@ -225,13 +241,18 @@ describe('tags ducks', () => {
           ...testState.resourceTags,
           tags: action.payload.tags,
           isLoading: false,
-        }
+        },
       });
     });
 
     it('should handle GetTableData.SUCCESS', () => {
       const mockTableData = globalState.tableMetadata.tableData;
-      expect(reducer(testState, getTableDataSuccess(mockTableData, {}, 200, expectedTags))).toEqual({
+      expect(
+        reducer(
+          testState,
+          getTableDataSuccess(mockTableData, {}, 200, expectedTags)
+        )
+      ).toEqual({
         ...testState,
         resourceTags: {
           ...testState.resourceTags,
@@ -246,7 +267,8 @@ describe('tags ducks', () => {
     describe('updateResourceTagsWatcher', () => {
       it('takes every UpdateTags.REQUEST with updateResourceTagsWorker', () => {
         testSaga(updateResourceTagsWatcher)
-          .next().takeEvery(UpdateTags.REQUEST, updateResourceTagsWorker);
+          .next()
+          .takeEvery(UpdateTags.REQUEST, updateResourceTagsWorker);
       });
     });
 
@@ -262,9 +284,15 @@ describe('tags ducks', () => {
        */
 
       it('handles request error', () => {
-        testSaga(updateResourceTagsWorker, updateTags(updatePayload, ResourceType.table, "test"))
-          .next(globalState).throw(new Error()).put(updateTagsFailure())
-          .next().isDone();
+        testSaga(
+          updateResourceTagsWorker,
+          updateTags(updatePayload, ResourceType.table, 'test')
+        )
+          .next(globalState)
+          .throw(new Error())
+          .put(updateTagsFailure())
+          .next()
+          .isDone();
       });
     });
   });

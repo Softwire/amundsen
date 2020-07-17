@@ -1,3 +1,6 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 import * as DocumentTitle from 'react-document-title';
 import * as History from 'history';
@@ -5,7 +8,18 @@ import * as History from 'history';
 import { shallow } from 'enzyme';
 
 import { ResourceType } from 'interfaces';
-import { mapDispatchToProps, mapStateToProps, SearchPage, SearchPageProps } from '.';
+
+import ResourceSelector from 'components/SearchPage/ResourceSelector';
+import SearchFilter from 'components/SearchPage/SearchFilter';
+import SearchPanel from 'components/SearchPage/SearchPanel';
+import PaginatedApiResourceList from 'components/common/ResourceList/PaginatedApiResourceList';
+
+import globalState from 'fixtures/globalState';
+import {
+  defaultEmptyFilters,
+  datasetFilterExample,
+} from 'fixtures/search/filters';
+import { getMockRouterProps } from 'fixtures/mockRouter';
 import {
   DOCUMENT_TITLE_SUFFIX,
   PAGE_INDEX_ERROR_MESSAGE,
@@ -18,47 +32,44 @@ import {
   TABLE_RESOURCE_TITLE,
   USER_RESOURCE_TITLE,
 } from './constants';
+import {
+  mapDispatchToProps,
+  mapStateToProps,
+  SearchPage,
+  SearchPageProps,
+} from '.';
 
-import LoadingSpinner from 'components/common/LoadingSpinner';
-import ResourceSelector from 'components/SearchPage/ResourceSelector';
-import SearchFilter from 'components/SearchPage/SearchFilter';
-import SearchPanel from 'components/SearchPage/SearchPanel';
-import PaginatedApiResourceList from 'components/common/ResourceList/PaginatedApiResourceList';
-
-import globalState from 'fixtures/globalState';
-import { defaultEmptyFilters, datasetFilterExample } from 'fixtures/search/filters';
-import { getMockRouterProps } from 'fixtures/mockRouter';
+const setup = (
+  propOverrides?: Partial<SearchPageProps>,
+  location?: Partial<History.Location>
+) => {
+  const routerProps = getMockRouterProps<any>(null, location);
+  const props: SearchPageProps = {
+    hasFilters: false,
+    searchTerm: globalState.search.search_term,
+    resource: ResourceType.table,
+    isLoading: false,
+    dashboards: globalState.search.dashboards,
+    tables: globalState.search.tables,
+    users: globalState.search.users,
+    setPageIndex: jest.fn(),
+    urlDidUpdate: jest.fn(),
+    ...routerProps,
+    ...propOverrides,
+  };
+  const wrapper = shallow<SearchPage>(<SearchPage {...props} />);
+  return { props, wrapper };
+};
 
 describe('SearchPage', () => {
-  const setStateSpy = jest.spyOn(SearchPage.prototype, 'setState');
-  const setup = (propOverrides?: Partial<SearchPageProps>, location?: Partial<History.Location>) => {
-    const routerProps = getMockRouterProps<any>(null, location);
-    const props: SearchPageProps = {
-      hasFilters: false,
-      searchTerm: globalState.search.search_term,
-      resource: ResourceType.table,
-      isLoading: false,
-      dashboards: globalState.search.dashboards,
-      tables: globalState.search.tables,
-      users: globalState.search.users,
-      setPageIndex: jest.fn(),
-      urlDidUpdate: jest.fn(),
-      ...routerProps,
-      ...propOverrides,
-    };
-    const wrapper = shallow<SearchPage>(<SearchPage {...props} />)
-    return { props, wrapper };
-  };
-
   describe('componentDidMount', () => {
     let props;
     let wrapper;
+
     beforeAll(() => {
-      const setupResult = setup(null, {
+      ({ props, wrapper } = setup(null, {
         search: '/search?searchTerm=testName&resource=table&pageIndex=1',
-      });
-      props = setupResult.props;
-      wrapper = setupResult.wrapper;
+      }));
     });
 
     it('calls getUrlParams and getGlobalStateParams', () => {
@@ -70,15 +81,12 @@ describe('SearchPage', () => {
   describe('componentDidUpdate', () => {
     let props;
     let wrapper;
-
     let mockPrevProps;
-    beforeAll(() => {
-      const setupResult = setup(null, {
-        search: '/search?searchTerm=testName&resource=table&pageIndex=1',
-      });
-      props = setupResult.props;
-      wrapper = setupResult.wrapper;
 
+    beforeAll(() => {
+      ({ props, wrapper } = setup(null, {
+        search: '/search?searchTerm=testName&resource=table&pageIndex=1',
+      }));
       mockPrevProps = {
         searchTerm: 'previous',
         location: {
@@ -86,7 +94,7 @@ describe('SearchPage', () => {
           pathname: 'mockstr',
           state: jest.fn(),
           hash: 'mockstr',
-        }
+        },
       };
     });
 
@@ -105,8 +113,9 @@ describe('SearchPage', () => {
 
   describe('generateTabLabel', () => {
     let wrapper;
+
     beforeAll(() => {
-      wrapper = setup().wrapper;
+      ({ wrapper } = setup());
     });
 
     it('returns correct text for ResourceType.table', () => {
@@ -136,11 +145,16 @@ describe('SearchPage', () => {
     describe('if no search input (no term or filters)', () => {
       it('renders default search page message', () => {
         const { props, wrapper } = setup({ searchTerm: '', hasFilters: false });
-        content = shallow(wrapper.instance().getTabContent({
-          page_index: 0,
-          results: [],
-          total_results: 0,
-        }, ResourceType.table));
+        content = shallow(
+          wrapper.instance().getTabContent(
+            {
+              page_index: 0,
+              results: [],
+              total_results: 0,
+            },
+            ResourceType.table
+          )
+        );
         expect(content.children().at(0).text()).toEqual(SEARCH_DEFAULT_MESSAGE);
       });
     });
@@ -153,17 +167,21 @@ describe('SearchPage', () => {
           results: [],
           total_results: 0,
         };
-      })
+      });
       it('if there is a searchTerm ', () => {
-        const { props, wrapper } = setup({ searchTerm: 'data' });
-        content = shallow(wrapper.instance().getTabContent(testResults, ResourceType.table));
+        const { wrapper } = setup({ searchTerm: 'data' });
+        content = shallow(
+          wrapper.instance().getTabContent(testResults, ResourceType.table)
+        );
         const message = `${SEARCH_ERROR_MESSAGE_PREFIX}${TABLE_RESOURCE_TITLE.toLowerCase()}${SEARCH_ERROR_MESSAGE_SUFFIX}`;
         expect(content.children().at(0).text()).toEqual(message);
       });
 
       it('if no searchTerm but there are filters active', () => {
-        const { props, wrapper } = setup({ searchTerm: '', hasFilters: true });
-        content = shallow(wrapper.instance().getTabContent(testResults, ResourceType.table));
+        const { wrapper } = setup({ searchTerm: '', hasFilters: true });
+        content = shallow(
+          wrapper.instance().getTabContent(testResults, ResourceType.table)
+        );
         const message = `${SEARCH_ERROR_MESSAGE_PREFIX}${TABLE_RESOURCE_TITLE.toLowerCase()}${SEARCH_ERROR_MESSAGE_SUFFIX}`;
         expect(content.children().at(0).text()).toEqual(message);
       });
@@ -171,14 +189,18 @@ describe('SearchPage', () => {
 
     describe('if page index is out of bounds', () => {
       it('renders expected page index error message', () => {
-        const { props, wrapper } = setup();
+        const { wrapper } = setup();
         const testResults = {
           page_index: 2,
           results: [],
           total_results: 1,
         };
-        content = shallow(wrapper.instance().getTabContent(testResults, ResourceType.table));
-        expect(content.children().at(0).text()).toEqual(PAGE_INDEX_ERROR_MESSAGE);
+        content = shallow(
+          wrapper.instance().getTabContent(testResults, ResourceType.table)
+        );
+        expect(content.children().at(0).text()).toEqual(
+          PAGE_INDEX_ERROR_MESSAGE
+        );
       });
     });
 
@@ -186,12 +208,15 @@ describe('SearchPage', () => {
       let props;
       let wrapper;
       let generateInfoTextMockResults;
+
       beforeAll(() => {
         const setupResult = setup({ searchTerm: '' });
         props = setupResult.props;
         wrapper = setupResult.wrapper;
         generateInfoTextMockResults = 'test info text';
-        content = shallow(wrapper.instance().getTabContent(props.tables, ResourceType.table));
+        content = shallow(
+          wrapper.instance().getTabContent(props.tables, ResourceType.table)
+        );
       });
 
       it('renders PaginatedApiResourceList with correct props', () => {
@@ -201,8 +226,12 @@ describe('SearchPage', () => {
           results: [],
           total_results: 11,
         };
-        content = shallow(wrapper.instance().getTabContent(testResults, ResourceType.table));
-        expect(content.children().find(PaginatedApiResourceList).props()).toMatchObject({
+        content = shallow(
+          wrapper.instance().getTabContent(testResults, ResourceType.table)
+        );
+        expect(
+          content.children().find(PaginatedApiResourceList).props()
+        ).toMatchObject({
           activePage: 0,
           itemsPerPage: RESULTS_PER_PAGE,
           onPagination: props.setPageIndex,
@@ -216,87 +245,102 @@ describe('SearchPage', () => {
 
   describe('renderContent', () => {
     it('renders search results when given search term', () => {
-      const {props, wrapper} = setup({ searchTerm: 'test' });
-      expect(wrapper.instance().renderContent()).toEqual(wrapper.instance().renderSearchResults());
+      const { wrapper } = setup({ searchTerm: 'test' });
+
+      expect(wrapper.instance().renderContent()).toEqual(
+        wrapper.instance().renderSearchResults()
+      );
     });
 
-    it('renders loading spinner when in loading state', () => {
-      const {props, wrapper} = setup({ isLoading: true });
-      expect(wrapper.instance().renderContent()).toEqual(<LoadingSpinner/>);
+    it('renders shimmering loader when in loading state', () => {
+      const { wrapper } = setup({ isLoading: true });
+      const expected = 1;
+      const actual = wrapper.find('ShimmeringResourceLoader').length;
+
+      expect(actual).toEqual(expected);
     });
   });
 
   describe('renderSearchResults', () => {
     it('renders the correct content for table resources', () => {
       const { props, wrapper } = setup({
-        resource: ResourceType.table
+        resource: ResourceType.table,
       });
       const getTabContentSpy = jest.spyOn(wrapper.instance(), 'getTabContent');
       shallow(wrapper.instance().renderSearchResults());
-      expect(getTabContentSpy).toHaveBeenCalledWith(props.tables, ResourceType.table);
+      expect(getTabContentSpy).toHaveBeenCalledWith(
+        props.tables,
+        ResourceType.table
+      );
     });
 
     it('renders the correct content for user resources', () => {
       const { props, wrapper } = setup({
-        resource: ResourceType.user
+        resource: ResourceType.user,
       });
       const getTabContentSpy = jest.spyOn(wrapper.instance(), 'getTabContent');
       shallow(wrapper.instance().renderSearchResults());
-      expect(getTabContentSpy).toHaveBeenCalledWith(props.users, ResourceType.user);
+      expect(getTabContentSpy).toHaveBeenCalledWith(
+        props.users,
+        ResourceType.user
+      );
     });
 
     it('renders the correct content for dashboard resources', () => {
       const { props, wrapper } = setup({
-        resource: ResourceType.dashboard
+        resource: ResourceType.dashboard,
       });
       const getTabContentSpy = jest.spyOn(wrapper.instance(), 'getTabContent');
       shallow(wrapper.instance().renderSearchResults());
-      expect(getTabContentSpy).toHaveBeenCalledWith(props.dashboards, ResourceType.dashboard);
+      expect(getTabContentSpy).toHaveBeenCalledWith(
+        props.dashboards,
+        ResourceType.dashboard
+      );
     });
 
     it('renders null for an invalid resource', () => {
-      const { props, wrapper } = setup({
-        resource: null
+      const { wrapper } = setup({
+        resource: null,
       });
       const renderedSearchResults = wrapper.instance().renderSearchResults();
       expect(renderedSearchResults).toBe(null);
     });
-
   });
 
   describe('render', () => {
     describe('DocumentTitle', () => {
       it('renders correct title if there is a search term', () => {
-        const { props, wrapper } = setup({ searchTerm: 'test search' });
+        const { wrapper } = setup({ searchTerm: 'test search' });
         expect(wrapper.find(DocumentTitle).props()).toMatchObject({
-          title: `test search${DOCUMENT_TITLE_SUFFIX}`
+          title: `test search${DOCUMENT_TITLE_SUFFIX}`,
         });
       });
 
       it('does not render DocumentTitle if searchTerm is empty string', () => {
-        const { props, wrapper } = setup({ searchTerm: '' });
+        const { wrapper } = setup({ searchTerm: '' });
         expect(wrapper.find(DocumentTitle).exists()).toBeFalsy();
       });
     });
 
     it('calls renderSearchResults if searchTerm is not empty string', () => {
       const { props, wrapper } = setup({ searchTerm: 'test search' });
-      const renderSearchResultsSpy = jest.spyOn(wrapper.instance(), 'renderSearchResults');
+      const renderSearchResultsSpy = jest.spyOn(
+        wrapper.instance(),
+        'renderSearchResults'
+      );
       wrapper.setProps(props);
       expect(renderSearchResultsSpy).toHaveBeenCalled();
     });
   });
 
   describe('renders a SearchPanel', () => {
-    let props;
     let wrapper;
     let searchPanel;
+
     beforeAll(() => {
-      const setupResult = setup();
-      props = setupResult.props;
-      wrapper = setupResult.wrapper;
+      ({ wrapper } = setup());
       searchPanel = wrapper.find(SearchPanel);
-    })
+    });
     it('renders a search panel', () => {
       expect(searchPanel.exists()).toBe(true);
     });
@@ -306,8 +350,7 @@ describe('SearchPage', () => {
     it('renders SearchFilter as SearchPanel child', () => {
       expect(searchPanel.find(SearchFilter).exists()).toBe(true);
     });
-  })
-
+  });
 });
 
 describe('mapDispatchToProps', () => {
@@ -360,22 +403,22 @@ describe('mapStateToProps', () => {
   describe('sets hasFilters on the props', () => {
     it('sets fo falsy value if selected resource has no filters', () => {
       const testState = {
-        ...globalState
+        ...globalState,
       };
       testState.search.resource = ResourceType.user;
       testState.search.filters = defaultEmptyFilters;
       result = mapStateToProps(testState);
       expect(result.hasFilters).toBeFalsy();
-    })
+    });
 
     it('sets true if selected resource has filters', () => {
       const testState = {
-        ...globalState
+        ...globalState,
       };
       testState.search.resource = ResourceType.table;
       testState.search.filters = datasetFilterExample;
       result = mapStateToProps(testState);
       expect(result.hasFilters).toBe(true);
-    })
+    });
   });
 });

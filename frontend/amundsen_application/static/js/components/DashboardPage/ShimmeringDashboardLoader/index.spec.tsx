@@ -1,7 +1,10 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 import { shallow } from 'enzyme';
 
-import ShimmeringDashboardLoader from './';
+import ShimmeringDashboardLoader from '.';
 
 const setup = () => {
   const wrapper = shallow(<ShimmeringDashboardLoader />);
@@ -12,7 +15,9 @@ const setup = () => {
 describe('ShimmeringDashboardLoader', () => {
   describe('render', () => {
     it('should render without errors', () => {
-      expect(() => {setup()}).not.toThrow();
+      expect(() => {
+        setup();
+      }).not.toThrow();
     });
 
     it('should render three rows', () => {

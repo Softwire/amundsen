@@ -1,6 +1,9 @@
+# Copyright Contributors to the Amundsen project.
+# SPDX-License-Identifier: Apache-2.0
+
 import distutils.util
 import os
-from typing import List, Dict, Optional  # noqa: F401
+from typing import List, Dict, Optional, Set  # noqa: F401
 
 # PROXY configuration keys
 PROXY_HOST = 'PROXY_HOST'
@@ -17,6 +20,7 @@ PROXY_CLIENTS = {
 }
 
 IS_STATSD_ON = 'IS_STATSD_ON'
+USER_OTHER_KEYS = 'USER_OTHER_KEYS'
 
 
 class Config:
@@ -32,9 +36,13 @@ class Config:
 
     PROXY_USER = os.environ.get('CREDENTIALS_PROXY_USER', 'neo4j')
     PROXY_PASSWORD = os.environ.get('CREDENTIALS_PROXY_PASSWORD', 'test')
+
     PROXY_ENCRYPTED = True
     """Whether the connection to the proxy should use SSL/TLS encryption."""
-    PROXY_VALIDATE_SSL = True
+
+    # Prior to enable PROXY_VALIDATE_SSL, you need to configure SSL.
+    # https://neo4j.com/docs/operations-manual/current/security/ssl-framework/
+    PROXY_VALIDATE_SSL = False
     """Whether the SSL/TLS certificate presented by the user should be validated against the system's trusted CAs."""
 
     IS_STATSD_ON = False
@@ -56,9 +64,18 @@ class Config:
 
     USER_DETAIL_METHOD = None   # type: Optional[function]
 
+    # On User detail method, these keys will be added into amundsen_common.models.user.User.other_key_values
+    USER_OTHER_KEYS = {'mode_user_id'}  # type: Set[str]
+
+    # Number of minimum reader count to qualify for popular table
+    POPULAR_TABLE_MINIMUM_READER_COUNT = 10  # type: int
+
+    # List of regexes which will exclude certain parameters from appearing as Programmatic Descriptions
+    PROGRAMMATIC_DESCRIPTIONS_EXCLUDE_FILTERS = []  # type: list
+
 
 class LocalConfig(Config):
-    DEBUG = False
+    DEBUG = True
     TESTING = False
     LOG_LEVEL = 'DEBUG'
     LOCAL_HOST = '0.0.0.0'

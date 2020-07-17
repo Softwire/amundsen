@@ -1,12 +1,15 @@
+# Copyright Contributors to the Amundsen project.
+# SPDX-License-Identifier: Apache-2.0
+
 import copy
 import unittest
-from typing import Any, Dict, Optional, cast
+from typing import Any, Dict, Optional, cast, List
 
 from amundsen_common.models.popular_table import PopularTable
-from amundsen_common.models.table import Column, Statistics, Table, Tag, User
+from amundsen_common.models.table import Column, Statistics, Table, Tag, User, Reader, ProgrammaticDescription
 from atlasclient.exceptions import BadRequest
 from mock import MagicMock, patch
-from tests.unit.proxy.fixtures.atlas_test_data import Data
+from tests.unit.proxy.fixtures.atlas_test_data import Data, DottedDict
 
 from metadata_service import create_app
 from metadata_service.entity.tag_detail import TagDetail
@@ -18,6 +21,7 @@ from metadata_service.entity.resource_type import ResourceType
 class TestAtlasProxy(unittest.TestCase, Data):
     def setUp(self) -> None:
         self.app = create_app(config_module_class='metadata_service.config.LocalConfig')
+        self.app.config['PROGRAMMATIC_DESCRIPTIONS_EXCLUDE_FILTERS'] = ['spark.*']
         self.app_context = self.app.app_context()
         self.app_context.push()
 
@@ -126,7 +130,12 @@ class TestAtlasProxy(unittest.TestCase, Data):
                          description=ent_attrs['description'],
                          owners=[User(email=ent_attrs['owner'])],
                          last_updated_timestamp=int(str(self.entity1['updateTime'])[:10]),
-                         columns=[exp_col] * self.active_columns)
+                         columns=[exp_col] * self.active_columns,
+                         programmatic_descriptions=[ProgrammaticDescription(source='test parameter key a',
+                                                                            text='testParameterValueA'),
+                                                    ProgrammaticDescription(source='test parameter key b',
+                                                                            text='testParameterValueB')
+                                                    ])
 
         self.assertEqual(str(expected), str(response))
 
@@ -302,6 +311,43 @@ class TestAtlasProxy(unittest.TestCase, Data):
                                                         relation_type=UserResourceRel.follow,
                                                         resource_type=ResourceType.Table)
             mock_execute.assert_called_with()
+
+    def test_get_readers(self) -> None:
+        basic_search_result = MagicMock()
+        basic_search_result.entities = self.reader_entities
+
+        self.proxy._driver.search_basic.create = MagicMock(return_value=basic_search_result)
+
+        entity_bulk_result = MagicMock()
+        entity_bulk_result.entities = self.reader_entities
+        self.proxy._driver.entity_bulk = MagicMock(return_value=[entity_bulk_result])
+
+        res = self.proxy._get_readers('dummy', 1)
+
+        expected: List[Reader] = []
+
+        expected += [Reader(user=User(email='test_user_1', user_id='test_user_1'), read_count=5)]
+        expected += [Reader(user=User(email='test_user_2', user_id='test_user_2'), read_count=150)]
+
+        self.assertEqual(res, expected)
+
+    def test_get_frequently_used_tables(self) -> None:
+        entity_unique_attribute_result = MagicMock()
+        entity_unique_attribute_result.entity = DottedDict(self.user_entity_2)
+        self.proxy._driver.entity_unique_attribute = MagicMock(return_value=entity_unique_attribute_result)
+
+        entity_bulk_result = MagicMock()
+        entity_bulk_result.entities = [DottedDict(self.reader_entity_1)]
+        self.proxy._driver.entity_bulk = MagicMock(return_value=[entity_bulk_result])
+
+        expected = {'table': [PopularTable(cluster=self.cluster,
+                                           name='Table1',
+                                           schema=self.db,
+                                           database=self.entity_type)]}
+
+        res = self.proxy.get_frequently_used_tables(user_email='dummy')
+
+        self.assertEqual(expected, res)
 
 
 if __name__ == '__main__':

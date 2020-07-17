@@ -1,3 +1,6 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 import Pagination from 'react-js-pagination';
 
@@ -6,11 +9,14 @@ import { shallow } from 'enzyme';
 import { ResourceType } from 'interfaces';
 import ResourceListItem from 'components/common/ResourceListItem/index';
 
-import PaginatedApiResourceList, { PaginatedApiResourceListProps } from './';
+import PaginatedApiResourceList, { PaginatedApiResourceListProps } from '.';
 import * as CONSTANTS from '../constants';
 
 describe('PaginatedApiResourceList', () => {
-  const setStateSpy = jest.spyOn(PaginatedApiResourceList.prototype, 'setState');
+  const setStateSpy = jest.spyOn(
+    PaginatedApiResourceList.prototype,
+    'setState'
+  );
   const setup = (propOverrides?: Partial<PaginatedApiResourceListProps>) => {
     const props: PaginatedApiResourceListProps = {
       activePage: 3,
@@ -24,17 +30,19 @@ describe('PaginatedApiResourceList', () => {
       ],
       totalItemsCount: 40,
       source: 'testSource',
-      ...propOverrides
+      ...propOverrides,
     };
-    const wrapper = shallow<PaginatedApiResourceList>(<PaginatedApiResourceList {...props} />);
+    const wrapper = shallow<PaginatedApiResourceList>(
+      <PaginatedApiResourceList {...props} />
+    );
     return { props, wrapper };
   };
 
   describe('onPagination', () => {
     it('calls the onPagination prop', () => {
       const setupResult = setup();
-      const wrapper = setupResult.wrapper;
-      const props = setupResult.props;
+      const { wrapper } = setupResult;
+      const { props } = setupResult;
       const onPaginationSpy = jest.spyOn(props, 'onPagination');
       wrapper.instance().onPagination(3);
       expect(onPaginationSpy).toHaveBeenCalledWith(2);
@@ -51,7 +59,10 @@ describe('PaginatedApiResourceList', () => {
     });
 
     it('renders empty messages if it exists and there are no items', () => {
-      const { props, wrapper } = setup({ totalItemsCount: 0, emptyText: 'Nothing Here'});
+      const { props, wrapper } = setup({
+        totalItemsCount: 0,
+        emptyText: 'Nothing Here',
+      });
       expect(wrapper.find('.empty-message').text()).toBe(props.emptyText);
     });
 

@@ -1,3 +1,6 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -20,6 +23,14 @@ interface DispatchFromProps {
 
 export type FooterProps = StateFromProps & DispatchFromProps;
 
+const ShimmeringFooterLoader: React.FC = () => {
+  return (
+    <div className="shimmer-footer">
+      <div className="shimmer-footer-row is-shimmer-animated" />
+    </div>
+  );
+};
+
 export class Footer extends React.Component<FooterProps> {
   componentDidMount() {
     this.props.getLastIndexed();
@@ -30,30 +41,36 @@ export class Footer extends React.Component<FooterProps> {
   };
 
   render() {
-    let content;
-    if (!!this.props.lastIndexed) {
-      content = <div>{`Amundsen was last indexed on ${this.generateDateTimeString()}`}</div>;
+    let content = <ShimmeringFooterLoader />;
+
+    if (this.props.lastIndexed) {
+      content = (
+        <div>{`Amundsen was last indexed on ${this.generateDateTimeString()}`}</div>
+      );
     }
+
     return (
-      <div>
+      <footer>
         <div className="phantom-div" />
         <div id="footer" className="footer">
-          { content }
+          {content}
         </div>
-      </div>
+      </footer>
     );
   }
 }
 
-
 export const mapStateToProps = (state: GlobalState) => {
   return {
-    lastIndexed: state.tableMetadata.lastIndexed
-  }
+    lastIndexed: state.tableMetadata.lastIndexed,
+  };
 };
 
 export const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({ getLastIndexed }, dispatch);
 };
 
-export default connect<StateFromProps, DispatchFromProps>(mapStateToProps, mapDispatchToProps)(Footer);
+export default connect<StateFromProps, DispatchFromProps>(
+  mapStateToProps,
+  mapDispatchToProps
+)(Footer);

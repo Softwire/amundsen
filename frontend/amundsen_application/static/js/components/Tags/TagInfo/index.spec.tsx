@@ -1,10 +1,11 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 import { shallow } from 'enzyme';
 
-import { mapDispatchToProps, TagInfo, TagInfoProps } from '.';
-
 import * as UtilMethods from 'ducks/utilMethods';
-
+import { mapDispatchToProps, TagInfo, TagInfoProps } from '.';
 
 const logClickSpy = jest.spyOn(UtilMethods, 'logClick');
 logClickSpy.mockImplementation(() => null);
@@ -24,7 +25,6 @@ describe('TagInfo', () => {
     return { props, wrapper };
   };
 
-
   describe('onClick', () => {
     let props;
     let wrapper;
@@ -43,7 +43,7 @@ describe('TagInfo', () => {
         label: props.data.tag_name,
       };
       wrapper.instance().onClick(mockEvent);
-      expect(logClickSpy).toHaveBeenCalledWith(mockEvent, expectedData)
+      expect(logClickSpy).toHaveBeenCalledWith(mockEvent, expectedData);
     });
 
     it('it calls searchTag', () => {
@@ -51,7 +51,6 @@ describe('TagInfo', () => {
       expect(props.searchTag).toHaveBeenCalledWith(props.data.tag_name);
     });
   });
-
 
   describe('render', () => {
     describe('renders a normal sized tag', () => {
@@ -67,17 +66,17 @@ describe('TagInfo', () => {
       it('renders a button with correct props', () => {
         expect(wrapper.find('button').props()).toMatchObject({
           id: `tag::${props.data.tag_name}`,
-          role: 'button',
           onClick: wrapper.instance().onClick,
-          className: 'btn tag-button'
+          className: 'btn tag-button',
         });
       });
 
       it('renders with correct text', () => {
-        expect(wrapper.text()).toEqual(props.data.tag_name + props.data.tag_count)
+        expect(wrapper.text()).toEqual(
+          props.data.tag_name + props.data.tag_count
+        );
       });
     });
-
 
     describe('renders a compact sized tag', () => {
       let props;
@@ -90,11 +89,13 @@ describe('TagInfo', () => {
       });
 
       it('renders with correct text', () => {
-        expect(wrapper.text()).toEqual(props.data.tag_name)
+        expect(wrapper.text()).toEqual(props.data.tag_name);
       });
 
       it('renders with the correct classes', () => {
-        expect(wrapper.find('button').props().className).toEqual('btn tag-button compact')
+        expect(wrapper.find('button').props().className).toEqual(
+          'btn tag-button compact'
+        );
       });
     });
   });

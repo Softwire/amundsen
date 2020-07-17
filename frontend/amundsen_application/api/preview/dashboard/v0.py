@@ -1,3 +1,6 @@
+# Copyright Contributors to the Amundsen project.
+# SPDX-License-Identifier: Apache-2.0
+
 import io
 import logging
 from http import HTTPStatus
@@ -5,8 +8,8 @@ from http import HTTPStatus
 from flask import send_file, jsonify, make_response, Response, current_app as app
 from flask.blueprints import Blueprint
 
-from amundsen_application.dashboard_preview.preview_factory_method import DefaultPreviewMethodFactory, \
-    BasePreviewMethodFactory
+from amundsen_application.api.preview.dashboard.dashboard_preview.preview_factory_method import \
+    DefaultPreviewMethodFactory, BasePreviewMethodFactory
 
 LOGGER = logging.getLogger(__name__)
 PREVIEW_FACTORY: BasePreviewMethodFactory = None  # type: ignore
@@ -47,6 +50,9 @@ def get_preview_image(uri: str) -> Response:
     except FileNotFoundError as fne:
         LOGGER.exception('FileNotFoundError on get_preview_image')
         return make_response(jsonify({'msg': fne.args[0]}), HTTPStatus.NOT_FOUND)
+    except PermissionError as pe:
+        LOGGER.exception('PermissionError on get_preview_image')
+        return make_response(jsonify({'msg': pe.args[0]}), HTTPStatus.UNAUTHORIZED)
     except Exception as e:
         LOGGER.exception('Unexpected failure on get_preview_image')
         return make_response(jsonify({'msg': 'Encountered exception: ' + str(e)}), HTTPStatus.INTERNAL_SERVER_ERROR)

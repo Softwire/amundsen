@@ -1,42 +1,52 @@
-import { ActionLogParams, postActionLog } from "./log/api/v0";
 import { Tag } from 'interfaces';
+import { ActionLogParams, postActionLog } from './log/api/v0';
 
 export function sortTagsAlphabetical(a: Tag, b: Tag): number {
   return a.tag_name.localeCompare(b.tag_name);
 }
 
-export function extractFromObj(initialObj: object, desiredKeys: string[]): object {
+export function extractFromObj(
+  initialObj: object,
+  desiredKeys: string[]
+): object {
   return Object.keys(initialObj)
-  .filter((key) => {
-    return desiredKeys.indexOf(key) > -1;
-  })
-  .reduce((obj, key) => {
-    obj[key] = initialObj[key];
-    return obj;
-  }, {});
+    .filter((key) => {
+      return desiredKeys.indexOf(key) > -1;
+    })
+    .reduce((obj, key) => {
+      obj[key] = initialObj[key];
+      return obj;
+    }, {});
 }
 
-export function filterFromObj(initialObj: object, rejectedKeys: string[]): object {
+export function filterFromObj(
+  initialObj: object,
+  rejectedKeys: string[]
+): object {
   return Object.keys(initialObj)
-  .filter((key) => {
-    return rejectedKeys.indexOf(key) === -1;
-  })
-  .reduce((obj, key) => {
-    obj[key] = initialObj[key];
-    return obj;
-  }, {});
+    .filter((key) => {
+      return rejectedKeys.indexOf(key) === -1;
+    })
+    .reduce((obj, key) => {
+      obj[key] = initialObj[key];
+      return obj;
+    }, {});
 }
 
-export function logClick(event: React.MouseEvent<HTMLElement>, declaredProps?: ActionLogParams) {
+export function logClick(
+  event: React.MouseEvent<HTMLElement>,
+  declaredProps?: ActionLogParams
+) {
   const target = event.currentTarget;
   const inferredProps: ActionLogParams = {
-    command: "click",
-    target_id: target.id,
+    command: 'click',
+    target_id:
+      target.dataset && target.dataset.type ? target.dataset.type : target.id,
     label: target.innerText || target.textContent,
   };
 
   if (target.nodeValue !== null) {
-    inferredProps.value = target.nodeValue
+    inferredProps.value = target.nodeValue;
   }
 
   let nodeName = target.nodeName.toLowerCase();
@@ -54,7 +64,7 @@ export function logClick(event: React.MouseEvent<HTMLElement>, declaredProps?: A
 
 export function logAction(declaredProps: ActionLogParams) {
   const inferredProps = {
-    location: window.location.pathname
+    location: window.location.pathname,
   };
   postActionLog({ ...inferredProps, ...declaredProps });
 }

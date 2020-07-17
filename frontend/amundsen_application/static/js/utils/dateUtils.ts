@@ -21,7 +21,7 @@ type DateConfig = TimestampDateConfig | EpochDateConfig | StringDateConfig;
 // This function is only exported for testing
 export function getMomentDate(config: DateConfig): Moment {
   let moment;
-  const timestamp = (config as TimestampDateConfig).timestamp;
+  const { timestamp } = config as TimestampDateConfig;
   const epoch = (config as EpochDateConfig).epochTimestamp;
   const { dateString, dateStringFormat } = config as StringDateConfig;
   if (timestamp !== undefined) {
@@ -29,9 +29,9 @@ export function getMomentDate(config: DateConfig): Moment {
   } else if (epoch !== undefined) {
     moment = Moment(epoch * 1000);
   } else if (dateString && dateStringFormat) {
-    moment = Moment(dateString, dateStringFormat)
+    moment = Moment(dateString, dateStringFormat);
   } else {
-    throw new Error('Cannot format date with invalid DateConfig object.')
+    throw new Error('Cannot format date with invalid DateConfig object.');
   }
   return moment.tz(timezone);
 }

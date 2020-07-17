@@ -1,3 +1,6 @@
+# Copyright Contributors to the Amundsen project.
+# SPDX-License-Identifier: Apache-2.0
+
 import copy
 import csv
 import ctypes
@@ -391,11 +394,11 @@ ON MATCH SET {update_prop_body}""".format(create_prop_body=create_prop_body,
                 template_params[k] = v
                 continue
 
-            # escape quote for Cypher query
             # if isinstance(str, v):
-            v = v.replace('\'', "\\'")
             # escape backslash for Cypher query
-            v = v.replace("\\", "\\")
+            v = v.replace('\\', '\\\\')
+            # escape quote for Cypher query
+            v = v.replace('\'', "\\'")
 
             if k.endswith(UNQUOTED_SUFFIX):
                 k = k[:-len(UNQUOTED_SUFFIX)]
@@ -421,7 +424,6 @@ ON MATCH SET {update_prop_body}""".format(create_prop_body=create_prop_body,
                            params=None,
                            expect_result=False):
         # type: (str, Transaction, bool) -> Transaction
-
         """
         Executes statement against Neo4j. If execution fails, it rollsback and raise exception.
         If 'expect_result' flag is True, it confirms if result object is not null.

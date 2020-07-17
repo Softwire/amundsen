@@ -686,6 +686,46 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#dashboard-preview" class="md-nav__link">
+    Dashboard Preview
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-to-configure-mode-dashboard-preview" class="md-nav__link">
+    How to configure Mode dashboard preview
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-to-enable-authorization-on-mode-dashboard" class="md-nav__link">
+    How to enable authorization on Mode dashboard
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-support-preview-of-different-product" class="md-nav__link">
+    How to support preview of different product?
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#mail-client-features" class="md-nav__link">
     Mail Client Features
   </a>
@@ -702,6 +742,13 @@
         <li class="md-nav__item">
   <a href="#programmatic-descriptions" class="md-nav__link">
     Programmatic Descriptions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#uneditable-table-descriptions" class="md-nav__link">
+    Uneditable Table Descriptions
   </a>
   
 </li>
@@ -1180,6 +1227,46 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#dashboard-preview" class="md-nav__link">
+    Dashboard Preview
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-to-configure-mode-dashboard-preview" class="md-nav__link">
+    How to configure Mode dashboard preview
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-to-enable-authorization-on-mode-dashboard" class="md-nav__link">
+    How to enable authorization on Mode dashboard
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-support-preview-of-different-product" class="md-nav__link">
+    How to support preview of different product?
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#mail-client-features" class="md-nav__link">
     Mail Client Features
   </a>
@@ -1196,6 +1283,13 @@
         <li class="md-nav__item">
   <a href="#programmatic-descriptions" class="md-nav__link">
     Programmatic Descriptions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#uneditable-table-descriptions" class="md-nav__link">
+    Uneditable Table Descriptions
   </a>
   
 </li>
@@ -1231,25 +1325,43 @@
 def custom_route<span class="o">()</span>:
   pass
 </code></pre></div></p>
+<h2 id="dashboard-preview">Dashboard Preview<a class="headerlink" href="#dashboard-preview" title="Permanent link">&para;</a></h2>
+<p>This service provides an API to download preview image of dashboard resources, which currently only supports <a href="https://app.mode.com/">Mode</a>.</p>
+<p>The dashboard preview image is cached in user&rsquo;s browser up to a day. In order to adjust this you can change the value of <code>DASHBOARD_PREVIEW_IMAGE_CACHE_MAX_AGE_SECONDS</code></p>
+<h3 id="how-to-configure-mode-dashboard-preview">How to configure Mode dashboard preview<a class="headerlink" href="#how-to-configure-mode-dashboard-preview" title="Permanent link">&para;</a></h3>
+<p>Add the following environment variables:
+<div class="highlight"><pre><span></span><code>    CREDENTIALS_MODE_ADMIN_TOKEN
+    CREDENTIALS_MODE_ADMIN_PASSWORD
+    MODE_ORGANIZATION
+</code></pre></div></p>
+<h4 id="how-to-enable-authorization-on-mode-dashboard">How to enable authorization on Mode dashboard<a class="headerlink" href="#how-to-enable-authorization-on-mode-dashboard" title="Permanent link">&para;</a></h4>
+<p>By default, Amundsen does not do any authorization on showing preview. By registering name of the Mode preview class in configuration, you can enable authorization.
+<div class="highlight"><pre><span></span><code>    <span class="nv">ACL_ENABLED_DASHBOARD_PREVIEW</span> <span class="o">=</span> <span class="o">{</span><span class="s1">&#39;ModePreview&#39;</span><span class="o">}</span>
+</code></pre></div>
+Amundsen ingests Mode dashboards only from the shared space, which all registered Mode users are able to view. Therefore our authorization first validates if the current user is registered in Mode. This feature is dependent on Amundsen also ingesting Mode user information via the <a href="https://github.com/lyft/amundsendatabuilder/blob/master/README.md#modedashboarduserextractor">ModeDashboardUserExtractor</a> and the metadata service version must be at least <a href="https://github.com/lyft/amundsenmetadatalibrary/releases/tag/v2.5.2">v2.5.2</a>.</p>
+<h3 id="how-to-support-preview-of-different-product">How to support preview of different product?<a class="headerlink" href="#how-to-support-preview-of-different-product" title="Permanent link">&para;</a></h3>
+<p>You can add preview support for different products by adding its preview class to <a href="https://github.com/lyft/amundsenfrontendlibrary/blob/master/amundsen_application/api/preview/dashboard/dashboard_preview/preview_factory_method.py#L27">DefaultPreviewMethodFactory</a>
+In order to develop new preview class, you need to implement the class that inherits <a href="https://github.com/lyft/amundsenfrontendlibrary/blob/master/amundsen_application/base/base_preview.py#L4">BasePreview</a> class and <a href="https://github.com/lyft/amundsenfrontendlibrary/blob/master/amundsen_application/api/preview/dashboard/dashboard_preview/mode_preview.py#L28">ModePreview</a> would be a great example.</p>
 <h2 id="mail-client-features">Mail Client Features<a class="headerlink" href="#mail-client-features" title="Permanent link">&para;</a></h2>
 <p>Amundsen has two features that leverage the custom mail client &ndash; the feedback tool and notifications. For these features a custom implementation of <a href="https://github.com/lyft/amundsenfrontendlibrary/blob/master/amundsen_application/base/base_mail_client.py">base_mail_client</a> must be mapped to the <code>MAIL_CLIENT</code> configuration variable.</p>
 <p>To fully enable these features in the UI, the application configuration variables for these features must also be set to true. Please see this <a href="../application_config/#mail-client-features">entry</a> in our application configuration doc for further information.</p>
 <h2 id="issue-tracking-integration-features">Issue Tracking Integration Features<a class="headerlink" href="#issue-tracking-integration-features" title="Permanent link">&para;</a></h2>
-<p>Amundsen has a feature to allow display of associated tickets within the table detail view. The feature both displays 
-open tickets and allows users to report new tickets associated with the table. These tickets must contain the 
-<code>table_uri</code> within the ticket text in order to be displayed; the <code>table_uri</code> is automatically added to tickets created 
+<p>Amundsen has a feature to allow display of associated tickets within the table detail view. The feature both displays
+open tickets and allows users to report new tickets associated with the table. These tickets must contain the
+<code>table_uri</code> within the ticket text in order to be displayed; the <code>table_uri</code> is automatically added to tickets created
 via the feature. Tickets are displayed from most recent to oldest, and currently only open tickets are displayed. Currently only
- <a href="https://www.atlassian.com/software/jira">JIRA</a> is supported. The UI must also be enabled to use this feature, please 
- see configuration notes <a href="../application_config/#issue-tracking-features">here</a>. </p>
-<p>There are several configuration 
-settings in <code>config.py</code> that should be set in order to use this feature. </p>
+ <a href="https://www.atlassian.com/software/jira">JIRA</a> is supported. The UI must also be enabled to use this feature, please
+ see configuration notes <a href="../application_config/#issue-tracking-features">here</a>.</p>
+<p>There are several configuration
+settings in <code>config.py</code> that should be set in order to use this feature.</p>
 <p>Here are the settings and what they should be set to
-<div class="highlight"><pre><span></span><code>    <span class="n">ISSUE_TRACKER_URL</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: str (Your JIRA environment, IE &#39;https://jira.net&#39;) </span>
+<div class="highlight"><pre><span></span><code>    <span class="n">ISSUE_LABELS</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># type: List[str] (Optional labels to be set on the created tickets)</span>
+    <span class="n">ISSUE_TRACKER_URL</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: str (Your JIRA environment, IE &#39;https://jira.net&#39;) </span>
     <span class="n">ISSUE_TRACKER_USER</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: str (Recommended to be a service account)</span>
-    <span class="n">ISSUE_TRACKER_PASSWORD</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: str </span>
-    <span class="n">ISSUE_TRACKER_PROJECT_ID</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: int (Project ID for the project you would like JIRA tickets to be created in) </span>
-    <span class="n">ISSUE_TRACKER_CLIENT</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: str (Fully qualified class name and path) </span>
-    <span class="n">ISSUE_TRACKER_CLIENT_ENABLED</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># type: bool (Enabling the feature, must be set to True) </span>
+    <span class="n">ISSUE_TRACKER_PASSWORD</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: str</span>
+    <span class="n">ISSUE_TRACKER_PROJECT_ID</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: int (Project ID for the project you would like JIRA tickets to be created in)</span>
+    <span class="n">ISSUE_TRACKER_CLIENT</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: str (Fully qualified class name and path)</span>
+    <span class="n">ISSUE_TRACKER_CLIENT_ENABLED</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># type: bool (Enabling the feature, must be set to True)</span>
     <span class="n">ISSUE_TRACKER_MAX_RESULTS</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: int (Max issues to display at a time)</span>
 </code></pre></div></p>
 <h2 id="programmatic-descriptions">Programmatic Descriptions<a class="headerlink" href="#programmatic-descriptions" title="Permanent link">&para;</a></h2>
@@ -1280,6 +1392,44 @@ You can then configure the descriptions to have a custom order in the config.py 
 description sources not mentioned in the configuration will be alphabetically placed at the end of the above list. If <code>PROGRAMMATIC_DISPLAY</code> is left at <code>None</code> all added fields are still showing up, so that display is entirely dynamically data-driven without configuration. Meaning configuration merely adds the (nice) benefit of setting display order.</p>
 <p>Here is a screenshot of what it would look like in the bottom left here:
 <img alt="programmatic_description" src="../img/programmatic_descriptions.png" /></p>
+<h2 id="uneditable-table-descriptions">Uneditable Table Descriptions<a class="headerlink" href="#uneditable-table-descriptions" title="Permanent link">&para;</a></h2>
+<p>Amundsen supports configuring table and column description to be non-editable for selective tables. You may want to make table 
+descriptions non-editable due to various reasons such as table already has table description from source of truth.
+You can define matching rules in  <a href="https://github.com/lyft/amundsenfrontendlibrary/blob/master/amundsen_application/config.py">config.py</a> for selecting tables. This configuration is useful as table selection criteria can 
+be company specific which will not directly integrated with Amundsen. 
+You can use different combinations of schema and table name for selecting tables.</p>
+<p>Here are some examples when this feature can be used: 
+1. You want to set all tables with a given schema or schema pattern as un-editable.
+2. You want to set all tables with a specific table name pattern in a given schema pattern as un-editable.
+3. You want to set all tables with a given table name pattern as un-editable.</p>
+<p>Amundsen has two variables in <code>config.py</code> file which can be used to define match rules:
+1. <code>UNEDITABLE_SCHEMAS</code> : Set of schemas where all tables should be un-editable. It takes exact schema name.
+2. <code>UNEDITABLE_TABLE_DESCRIPTION_MATCH_RULES</code> : List of MatchRuleObject, where each MatchRuleObject consists of regex for 
+schema name or regex for table name or both.</p>
+<p>Purpose of <code>UNEDITABLE_SCHEMAS</code> can be fulfilled by <code>UNEDITABLE_TABLE_DESCRIPTION_MATCH_RULES</code> but we are keeping both 
+variables for backward compatibility.
+If you want to restrict tables from a given schemas then you can use <code>UNEDITABLE_SCHEMAS</code> as follows:
+<div class="highlight"><pre><span></span><code><span class="n">UNEDITABLE_SCHEMAS</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;schema1&#39;</span><span class="p">,</span> <span class="s1">&#39;schema2&#39;</span><span class="p">])</span>
+</code></pre></div>
+After above configuration, all tables in &lsquo;schema1&rsquo; and &lsquo;schema2&rsquo; will have non-editable table and column descriptions.</p>
+<p>If you have more complex matching rules you can use <code>UNEDITABLE_TABLE_DESCRIPTION_MATCH_RULES</code>. It provides you more flexibility 
+and control as you can create multiple match rules and use regex for matching schema nad table names.</p>
+<p>You can configure your match rules in <code>config.py</code> as follow:
+<div class="highlight"><pre><span></span><code><span class="n">UNEDITABLE_TABLE_DESCRIPTION_MATCH_RULES</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="c1"># match rule for all table in schema1</span>
+        <span class="n">MatchRuleObject</span><span class="p">(</span><span class="n">schema_regex</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;^(schema1)&quot;</span><span class="p">),</span>
+        <span class="c1"># macth rule for all tables in schema2 and schema3</span>
+        <span class="n">MatchRuleObject</span><span class="p">(</span><span class="n">schema_regex</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;^(schema2|schema3)&quot;</span><span class="p">),</span>
+        <span class="c1"># match rule for tables in schema4 with table name pattern &#39;noedit_*&#39;</span>
+        <span class="n">MatchRuleObject</span><span class="p">(</span><span class="n">schema_regex</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;^(schema4)&quot;</span><span class="p">,</span> <span class="n">table_name_regex</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;^noedit_([a-zA-Z_0-9]+)&quot;</span><span class="p">),</span>
+        <span class="c1"># match rule for tables in schema5, schema6 and schema7 with table name pattern &#39;noedit_*&#39;</span>
+        <span class="n">MatchRuleObject</span><span class="p">(</span><span class="n">schema_regex</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;^(schema5|schema6|schema7)&quot;</span><span class="p">,</span> <span class="n">table_name_regex</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;^noedit_([a-zA-Z_0-9]+)&quot;</span><span class="p">),</span>
+        <span class="c1"># match rule for all tables with table name pattern &#39;others_*&#39;</span>
+        <span class="n">MatchRuleObject</span><span class="p">(</span><span class="n">table_name_regex</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;^others_([a-zA-Z_0-9]+)&quot;</span><span class="p">)</span>
+    <span class="p">]</span>
+</code></pre></div></p>
+<p>After configuring this, users will not be able to edit table and column descriptions of any table matching above match rules
+from UI.</p>
                 
                   
                 

@@ -1,3 +1,6 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 
 import { shallow } from 'enzyme';
@@ -5,20 +8,15 @@ import { shallow } from 'enzyme';
 import AppConfig from 'config/config';
 import globalState from 'fixtures/globalState';
 
+import { NO_DATA_ISSUES_TEXT } from 'components/TableDetail/TableIssues/constants';
 import {
   TableIssues,
   TableIssueProps,
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 } from '.';
 
-import { NO_DATA_ISSUES_TEXT } from "components/TableDetail/TableIssues/constants";
-import ReportTableIssue from 'components/TableDetail/ReportTableIssue';
-
-
-describe ('TableIssues', ()=> {
-  const setStateSpy = jest.spyOn(TableIssues.prototype, 'setState');
-
+describe('TableIssues', () => {
   const setup = (propOverrides?: Partial<TableIssueProps>) => {
     const props: TableIssueProps = {
       isLoading: false,
@@ -28,37 +26,44 @@ describe ('TableIssues', ()=> {
       total: 0,
       allIssuesUrl: 'testUrl',
       getIssues: jest.fn(),
-      ...propOverrides
+      ...propOverrides,
     };
     const wrapper = shallow<TableIssues>(<TableIssues {...props} />);
     return { props, wrapper };
-  }
+  };
 
   describe('render', () => {
     beforeAll(() => {
       AppConfig.issueTracking.enabled = true;
     });
 
-    it('renders LoadingSpinner if loading', () => {
-      const { props, wrapper } = setup({ isLoading: true });
-      expect(wrapper.find('LoadingSpinner').exists()).toBe(true);
+    it('renders Shimmer loader if loading', () => {
+      const { wrapper } = setup({ isLoading: true });
+      const expected = 1;
+      const actual = wrapper.find('ShimmeringIssuesLoader').length;
+
+      expect(actual).toEqual(expected);
     });
 
     it('renders text if no issues', () => {
-      const { props, wrapper } = setup({ issues: [] });
+      const { wrapper } = setup({ issues: [] });
       expect(wrapper.find('.issue-banner').text()).toEqual(NO_DATA_ISSUES_TEXT);
     });
 
     it('renders issues if they exist', () => {
       AppConfig.issueTracking.enabled = true;
-      const { props, wrapper } = setup({ issues: [{
-        issue_key: 'issue_key',
-        title: 'title',
-        url: 'http://url',
-        status: 'Open',
-        priority_display_name: 'P2',
-        priority_name: 'major'
-      }]});
+      const { wrapper } = setup({
+        issues: [
+          {
+            issue_key: 'issue_key',
+            title: 'title',
+            url: 'http://url',
+            status: 'Open',
+            priority_display_name: 'P2',
+            priority_name: 'major',
+          },
+        ],
+      });
       expect(wrapper.find('.table-issue-link').text()).toEqual('issue_key');
       expect(wrapper.find('.issue-title-name').text()).toContain('title');
       expect(wrapper.find('.table-issue-status').text()).toContain('Open');
@@ -66,26 +71,32 @@ describe ('TableIssues', ()=> {
     });
 
     it('renders no link to issues if no issues', () => {
-      const { props, wrapper } = setup({ issues: [],
+      const { wrapper } = setup({
+        issues: [],
         total: 0,
-        allIssuesUrl: null
+        allIssuesUrl: null,
       });
       expect(wrapper.find('.table-issue-more-issues').length).toEqual(0);
     });
 
     it('renders link if there are issues', () => {
-      const { props, wrapper } = setup({ issues: [{
-          issue_key: 'issue_key',
-          title: 'title',
-          url: 'http://url',
-          status: 'Open',
-          priority_display_name: 'P2',
-          priority_name: 'Major'
-        }],
+      const { wrapper } = setup({
+        issues: [
+          {
+            issue_key: 'issue_key',
+            title: 'title',
+            url: 'http://url',
+            status: 'Open',
+            priority_display_name: 'P2',
+            priority_name: 'Major',
+          },
+        ],
         total: 1,
-        allIssuesUrl: 'url'
+        allIssuesUrl: 'url',
       });
-      expect(wrapper.find('.table-issue-more-issues').text()).toEqual('View all 1 issues');
+      expect(wrapper.find('.table-issue-more-issues').text()).toEqual(
+        'View all 1 issues'
+      );
     });
   });
 

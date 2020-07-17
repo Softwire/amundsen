@@ -1,3 +1,6 @@
+# Copyright Contributors to the Amundsen project.
+# SPDX-License-Identifier: Apache-2.0
+
 import logging
 from re import sub
 from typing import Any, List, Dict, Tuple, Optional
@@ -9,7 +12,8 @@ from atlasclient.models import Entity, EntityCollection
 from atlasclient.utils import parse_table_qualified_name
 
 from search_service.models.dashboard import SearchDashboardResult
-from search_service.models.search_result import SearchResult
+from search_service.models.table import SearchTableResult
+from search_service.models.user import SearchUserResult
 from search_service.models.table import Table
 from search_service.models.tag import Tag
 from search_service.proxy import BaseProxy
@@ -191,7 +195,7 @@ class AtlasProxy(BaseProxy):
     def fetch_table_search_results(self, *,
                                    query_term: str,
                                    page_index: int = 0,
-                                   index: str = '') -> SearchResult:
+                                   index: str = '') -> SearchTableResult:
         """
         Conduct a 'Basic Search' in Amundsen UI.
 
@@ -202,23 +206,23 @@ class AtlasProxy(BaseProxy):
         :param query_term: Search Query Term
         :param page_index: Index of search page user is currently on (for pagination)
         :param index: Search Index (different resource corresponding to different index)
-        :return: SearchResult Object
+        :return: SearchTableResult Object
         """
         if not query_term:
             # return empty result for blank query term
-            return SearchResult(total_results=0, results=[])
+            return SearchTableResult(total_results=0, results=[])
 
         query_params = self._prepare_basic_search_query(self.page_size, page_index, query_term=query_term)
 
         tables, approx_count = self._atlas_basic_search(query_params)
 
-        return SearchResult(total_results=approx_count, results=tables)
+        return SearchTableResult(total_results=approx_count, results=tables)
 
-    def fetch_table_search_results_with_filter(self, *,
-                                               query_term: str,
-                                               search_request: dict,
-                                               page_index: int = 0,
-                                               index: str = '') -> SearchResult:
+    def fetch_search_results_with_filter(self, *,
+                                         query_term: str,
+                                         search_request: dict,
+                                         page_index: int = 0,
+                                         index: str = '') -> SearchTableResult:
         """
         Conduct an 'Advanced Search' to narrow down search results with a use of filters.
 
@@ -229,7 +233,7 @@ class AtlasProxy(BaseProxy):
         :param search_request: Values from Filters
         :param page_index: Index of search page user is currently on (for pagination)
         :param index: Search Index (different resource corresponding to different index)
-        :return: SearchResult Object
+        :return: SearchTableResult Object
         """
         _filters = search_request.get('filters', dict())
 
@@ -260,12 +264,12 @@ class AtlasProxy(BaseProxy):
 
         tables, approx_count = self._atlas_basic_search(query_params)
 
-        return SearchResult(total_results=approx_count, results=tables)
+        return SearchTableResult(total_results=approx_count, results=tables)
 
     def fetch_user_search_results(self, *,
                                   query_term: str,
                                   page_index: int = 0,
-                                  index: str = '') -> SearchResult:
+                                  index: str = '') -> SearchUserResult:
         pass
 
     def update_document(self, *, data: List[Dict[str, Any]], index: str = '') -> str:

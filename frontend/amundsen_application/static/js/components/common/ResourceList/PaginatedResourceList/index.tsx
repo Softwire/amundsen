@@ -1,3 +1,6 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 import Pagination from 'react-js-pagination';
 import ResourceListItem from 'components/common/ResourceListItem';
@@ -17,7 +20,10 @@ interface PaginatedResourceListState {
   activePage: number;
 }
 
-class PaginatedResourceList extends React.Component<PaginatedResourceListProps, PaginatedResourceListState> {
+class PaginatedResourceList extends React.Component<
+  PaginatedResourceListProps,
+  PaginatedResourceListState
+> {
   public static defaultProps: Partial<PaginatedResourceListProps> = {
     emptyText: Constants.DEFAULT_EMPTY_TEXT,
   };
@@ -34,7 +40,10 @@ class PaginatedResourceList extends React.Component<PaginatedResourceListProps, 
     const effectivePageNum = this.state.activePage + 1;
     const { itemsPerPage, allItems } = this.props;
     const newPage = Math.ceil(allItems.length / itemsPerPage) - 1;
-    if (itemsPerPage * effectivePageNum > allItems.length && newPage !== this.state.activePage) {
+    if (
+      itemsPerPage * effectivePageNum > allItems.length &&
+      newPage !== this.state.activePage
+    ) {
       this.setState({ activePage: newPage });
     }
   }
@@ -46,43 +55,41 @@ class PaginatedResourceList extends React.Component<PaginatedResourceListProps, 
 
   render() {
     const { allItems, emptyText, itemsPerPage, source } = this.props;
-    const activePage = this.state.activePage;
+    const { activePage } = this.state;
     const allItemsCount = allItems.length;
 
     const startIndex = itemsPerPage * activePage;
-    const itemsToRender = this.props.allItems.slice(startIndex, startIndex + itemsPerPage);
+    const itemsToRender = this.props.allItems.slice(
+      startIndex,
+      startIndex + itemsPerPage
+    );
 
     return (
       <div className="paginated-resource-list">
-        {
-          allItemsCount === 0 && emptyText &&
-          <div className="empty-message body-placeholder">
-            { emptyText }
-          </div>
-        }
-        {
-          allItemsCount > 0 &&
+        {allItemsCount === 0 && emptyText && (
+          <div className="empty-message body-placeholder">{emptyText}</div>
+        )}
+        {allItemsCount > 0 && (
           <>
             <ul className="list-group">
-              {
-                itemsToRender.map((item, idx) => {
-                  const logging = { source, index: startIndex + idx };
-                  return <ResourceListItem item={ item } logging={ logging } key={ idx } />;
-                })
-              }
+              {itemsToRender.map((item, idx) => {
+                const logging = { source, index: startIndex + idx };
+                return (
+                  <ResourceListItem item={item} logging={logging} key={idx} />
+                );
+              })}
             </ul>
-            {
-              allItemsCount > itemsPerPage &&
+            {allItemsCount > itemsPerPage && (
               <Pagination
-                activePage={ activePage + 1 }
-                itemsCountPerPage={ itemsPerPage }
-                totalItemsCount={ allItemsCount }
-                pageRangeDisplayed={ Constants.PAGINATION_PAGE_RANGE }
-                onChange={ this.onPagination }
+                activePage={activePage + 1}
+                itemsCountPerPage={itemsPerPage}
+                totalItemsCount={allItemsCount}
+                pageRangeDisplayed={Constants.PAGINATION_PAGE_RANGE}
+                onChange={this.onPagination}
               />
-            }
+            )}
           </>
-        }
+        )}
       </div>
     );
   }

@@ -1,3 +1,6 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 import { connect } from 'react-redux';
 
@@ -5,25 +8,33 @@ import 'components/common/Inputs/styles.scss';
 
 export interface CheckBoxItemProps {
   checked?: boolean;
-  disabled?: boolean
+  disabled?: boolean;
   name: string;
   onChange: (e: React.FormEvent<HTMLInputElement>) => any;
   value: string;
+  children: React.ReactNode;
 }
 
-const CheckBoxItem: React.SFC<CheckBoxItemProps> = ({ checked = false, disabled = false, name, onChange, value, children }) => {
+const CheckBoxItem: React.SFC<CheckBoxItemProps> = ({
+  checked = false,
+  disabled = false,
+  name,
+  onChange,
+  value,
+  children,
+}: CheckBoxItemProps) => {
   return (
     <div className="checkbox">
       <label className="checkbox-label">
         <input
           type="checkbox"
-          checked={ checked }
-          disabled={ disabled }
-          name={ name }
-          onChange={ onChange }
-          value={ value }
+          checked={checked}
+          disabled={disabled}
+          name={name}
+          onChange={onChange}
+          value={value}
         />
-        { children }
+        {children}
       </label>
     </div>
   );

@@ -1,3 +1,6 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 import * as Avatar from 'react-avatar';
 
@@ -11,17 +14,16 @@ export interface AvatarLabelProps {
   src?: string;
 }
 
-const AvatarLabel: React.SFC<AvatarLabelProps> = ({ avatarClass, labelClass, label, src }) => {
+const AvatarLabel: React.SFC<AvatarLabelProps> = ({
+  avatarClass,
+  labelClass,
+  label,
+  src,
+}: AvatarLabelProps) => {
   return (
     <div className="avatar-label-component">
-      <Avatar
-        className={avatarClass}
-        name={label}
-        src={src}
-        size={24}
-        round={true}
-      />
-      <span className={`avatar-label body-2 ${labelClass}`}>{ label }</span>
+      <Avatar className={avatarClass} name={label} src={src} size={24} round />
+      <span className={`avatar-label body-2 ${labelClass}`}>{label}</span>
     </div>
   );
 };
@@ -29,7 +31,7 @@ const AvatarLabel: React.SFC<AvatarLabelProps> = ({ avatarClass, labelClass, lab
 AvatarLabel.defaultProps = {
   labelClass: 'text-secondary',
   label: '',
-  src: ''
+  src: '',
 };
 
 export default AvatarLabel;

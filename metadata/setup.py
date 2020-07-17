@@ -1,8 +1,11 @@
+# Copyright Contributors to the Amundsen project.
+# SPDX-License-Identifier: Apache-2.0
+
 import os
 
 from setuptools import setup, find_packages
 
-__version__ = '2.5.1'
+__version__ = '2.5.4'
 
 
 requirements_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'requirements.txt')
@@ -15,7 +18,7 @@ setup(
     description='Metadata service for Amundsen',
     url='https://www.github.com/lyft/amundsenmetadatalibrary',
     maintainer='Lyft',
-    maintainer_email='dev@lyft.com',
+    maintainer_email='amundsen-dev@lyft.com',
     packages=find_packages(exclude=['tests*']),
     include_package_data=True,
     zip_safe=False,

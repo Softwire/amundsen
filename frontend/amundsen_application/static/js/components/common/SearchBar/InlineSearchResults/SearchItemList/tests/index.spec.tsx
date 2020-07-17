@@ -1,12 +1,15 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 
 import { mocked } from 'ts-jest/utils';
 import { shallow } from 'enzyme';
 
-import SearchItemList, { SearchItemListProps } from '../';
-import SearchItem from '../SearchItem';
-
 import { ResourceType } from 'interfaces';
+import { indexDashboardsEnabled, indexUsersEnabled } from 'config/config-utils';
+import SearchItemList, { SearchItemListProps } from '..';
+import SearchItem from '../SearchItem';
 
 import * as CONSTANTS from '../../constants';
 
@@ -15,13 +18,11 @@ jest.mock('config/config-utils', () => ({
   indexUsersEnabled: jest.fn(),
   indexDashboardsEnabled: jest.fn(),
 }));
-import { indexDashboardsEnabled, indexUsersEnabled } from 'config/config-utils';
 
-jest.mock("react-redux", () => {
+jest.mock('react-redux', () => {
   return {
-    connect: (mapStateToProps, mapDispatchToProps) => (
-      SearchItem
-    ) => SearchItem
+    connect: (mapStateToProps, mapDispatchToProps) => (SearchItem) =>
+      SearchItem,
   };
 });
 
@@ -30,7 +31,7 @@ describe('SearchItemList', () => {
     const props: SearchItemListProps = {
       onItemSelect: jest.fn(),
       searchTerm: 'test',
-      ...propOverrides
+      ...propOverrides,
     };
     const wrapper = shallow<SearchItemList>(<SearchItemList {...props} />);
     return { props, wrapper };
@@ -74,11 +75,15 @@ describe('SearchItemList', () => {
       setUpResult = setup();
       props = setUpResult.props;
       wrapper = setUpResult.wrapper;
-      mockListItemText = 'Hello'
-      getListItemTextSpy = jest.spyOn(wrapper.instance(), 'getListItemText').mockImplementation(() => mockListItemText);
+      mockListItemText = 'Hello';
+      getListItemTextSpy = jest
+        .spyOn(wrapper.instance(), 'getListItemText')
+        .mockImplementation(() => mockListItemText);
       wrapper.instance().forceUpdate();
 
-      const item = wrapper.find('SearchItem').findWhere(item => item.prop('resourceType') === ResourceType.table);
+      const item = wrapper
+        .find('SearchItem')
+        .findWhere((item) => item.prop('resourceType') === ResourceType.table);
       const itemProps = item.props();
       expect(getListItemTextSpy).toHaveBeenCalledWith(ResourceType.table);
       expect(itemProps.listItemText).toEqual(mockListItemText);
@@ -93,11 +98,15 @@ describe('SearchItemList', () => {
         setUpResult = setup();
         props = setUpResult.props;
         wrapper = setUpResult.wrapper;
-        mockListItemText = 'Hello'
-        getListItemTextSpy = jest.spyOn(wrapper.instance(), 'getListItemText').mockImplementation(() => mockListItemText);
+        mockListItemText = 'Hello';
+        getListItemTextSpy = jest
+          .spyOn(wrapper.instance(), 'getListItemText')
+          .mockImplementation(() => mockListItemText);
         wrapper.instance().forceUpdate();
 
-        const item = wrapper.find('SearchItem').findWhere(item => item.prop('resourceType') === ResourceType.user);
+        const item = wrapper
+          .find('SearchItem')
+          .findWhere((item) => item.prop('resourceType') === ResourceType.user);
         const itemProps = item.props();
         expect(getListItemTextSpy).toHaveBeenCalledWith(ResourceType.user);
         expect(itemProps.listItemText).toEqual(mockListItemText);
@@ -109,9 +118,11 @@ describe('SearchItemList', () => {
       it('when indexUsersEnabled = false, does not render SearchItem', () => {
         mocked(indexUsersEnabled).mockImplementation(() => false);
         wrapper = setup().wrapper;
-        const item = wrapper.find('SearchItem').findWhere(item => item.prop('resourceType') === ResourceType.user);
-        expect(item.exists()).toBe(false)
-      })
+        const item = wrapper
+          .find('SearchItem')
+          .findWhere((item) => item.prop('resourceType') === ResourceType.user);
+        expect(item.exists()).toBe(false);
+      });
     });
 
     describe('renders ResourceType.dashboard SearchItem based on config', () => {
@@ -120,11 +131,17 @@ describe('SearchItemList', () => {
         setUpResult = setup();
         props = setUpResult.props;
         wrapper = setUpResult.wrapper;
-        mockListItemText = 'Hello'
-        getListItemTextSpy = jest.spyOn(wrapper.instance(), 'getListItemText').mockImplementation(() => mockListItemText);
+        mockListItemText = 'Hello';
+        getListItemTextSpy = jest
+          .spyOn(wrapper.instance(), 'getListItemText')
+          .mockImplementation(() => mockListItemText);
         wrapper.instance().forceUpdate();
 
-        const item = wrapper.find('SearchItem').findWhere(item => item.prop('resourceType') === ResourceType.dashboard);
+        const item = wrapper
+          .find('SearchItem')
+          .findWhere(
+            (item) => item.prop('resourceType') === ResourceType.dashboard
+          );
         const itemProps = item.props();
         expect(getListItemTextSpy).toHaveBeenCalledWith(ResourceType.dashboard);
         expect(itemProps.listItemText).toEqual(mockListItemText);
@@ -136,9 +153,13 @@ describe('SearchItemList', () => {
       it('when indexDashboardsEnabled = false, does not render SearchItem', () => {
         mocked(indexDashboardsEnabled).mockImplementation(() => false);
         wrapper = setup().wrapper;
-        const item = wrapper.find('SearchItem').findWhere(item => item.prop('resourceType') === ResourceType.dashboard);
-        expect(item.exists()).toBe(false)
-      })
+        const item = wrapper
+          .find('SearchItem')
+          .findWhere(
+            (item) => item.prop('resourceType') === ResourceType.dashboard
+          );
+        expect(item.exists()).toBe(false);
+      });
     });
   });
 });

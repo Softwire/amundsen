@@ -4,8 +4,8 @@
     "outDir": "./dist/",
     "sourceMap": true,
     "noImplicitAny": false,
-    "module": "es6",
-    "target": "es5",
+    "module": "esnext",
+    "target": "es2015",
     "jsx": "react",
     "typeRoots": [
      "node_modules/@types"
@@ -29,6 +29,9 @@
     "**/__tests__",
   ],
   "include": [
-    "js"
+    "*.ts",
+    "*.js",
+    ".eslintrc.js",
+    "js/"
   ]
 }

@@ -1,3 +1,6 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 import { shallow } from 'enzyme';
 import * as ConfigUtils from 'config/config-utils';
@@ -5,18 +8,19 @@ import ExploreButton from 'components/TableDetail/ExploreButton';
 import { TableMetadata } from 'interfaces/TableMetadata';
 import { logClick } from 'ducks/utilMethods';
 
-
 let mockExploreEnabled = true;
 let mockExploreUrl = 'https://test-website.com';
 
-jest.mock('config/config-utils', () => (
-  {
-    exploreEnabled: () => { return mockExploreEnabled },
-    generateExploreUrl: () => { return mockExploreUrl }
-  }
-));
+jest.mock('config/config-utils', () => ({
+  exploreEnabled: () => {
+    return mockExploreEnabled;
+  },
+  generateExploreUrl: () => {
+    return mockExploreUrl;
+  },
+}));
 
-const generateExploreUrlSpy = jest.spyOn(ConfigUtils, "generateExploreUrl");
+const generateExploreUrlSpy = jest.spyOn(ConfigUtils, 'generateExploreUrl');
 
 describe('ExploreButton', () => {
   const setup = (tableDataOverrides?: Partial<TableMetadata>) => {
@@ -34,7 +38,12 @@ describe('ExploreButton', () => {
         name: 'table_name',
         last_updated_timestamp: 12321312321,
         description: '',
-        table_writer: { application_url: '', description: '', id: '', name: '' },
+        table_writer: {
+          application_url: '',
+          description: '',
+          id: '',
+          name: '',
+        },
         partition: {
           is_partitioned: true,
           key: 'partition_key',
@@ -47,13 +56,11 @@ describe('ExploreButton', () => {
         ...tableDataOverrides,
       },
     };
-    const wrapper = shallow<ExploreButton>(<ExploreButton {...props } />)
+    const wrapper = shallow<ExploreButton>(<ExploreButton {...props} />);
     return { props, wrapper };
   };
 
-  describe('generateUrl', () => {
-
-  });
+  describe('generateUrl', () => {});
 
   describe('render', () => {
     beforeEach(() => {
@@ -83,8 +90,8 @@ describe('ExploreButton', () => {
       const { props, wrapper } = setup();
       expect(wrapper.find('a').props()).toMatchObject({
         href: mockExploreUrl,
-        target: "_blank",
-        id: "explore-sql",
+        target: '_blank',
+        id: 'explore-sql',
         onClick: logClick,
       });
     });

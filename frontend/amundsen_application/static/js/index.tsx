@@ -1,4 +1,7 @@
-import "core-js/stable";
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
+import 'core-js/stable';
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
@@ -11,24 +14,27 @@ import { createStore, applyMiddleware } from 'redux';
 import { Router, Route, Switch } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
 
+import DashboardPage from 'components/DashboardPage';
+import Preloader from 'components/common/Preloader';
+import { BrowserHistory } from 'utils/navigationUtils';
 import AnnouncementPage from './components/AnnouncementPage';
 import BrowsePage from './components/BrowsePage';
-import DashboardPage from 'components/DashboardPage';
 import Footer from './components/Footer';
-import HomePage from './components/HomePage'
+import HomePage from './components/HomePage';
 import NavBar from './components/NavBar';
 import NotFoundPage from './components/NotFoundPage';
-import Preloader from 'components/common/Preloader';
 import ProfilePage from './components/ProfilePage';
 import SearchPage from './components/SearchPage';
 import TableDetail from './components/TableDetail';
 
 import rootReducer from './ducks/rootReducer';
 import rootSaga from './ducks/rootSaga';
-import { BrowserHistory } from 'utils/navigationUtils';
 
 const sagaMiddleware = createSagaMiddleware();
-const createStoreWithMiddleware = applyMiddleware(ReduxPromise, sagaMiddleware)(createStore);
+const createStoreWithMiddleware = applyMiddleware(
+  ReduxPromise,
+  sagaMiddleware
+)(createStore);
 const store = createStoreWithMiddleware(rootReducer);
 
 sagaMiddleware.run(rootSaga);
@@ -37,23 +43,26 @@ ReactDOM.render(
   <DocumentTitle title="Amundsen - Data Discovery Portal">
     <Provider store={store}>
       <Router history={BrowserHistory}>
-        <main id="main">
-          <Preloader/>
+        <div id="main">
+          <Preloader />
           <Route component={NavBar} />
           <Switch>
             <Route path="/announcements" component={AnnouncementPage} />
             <Route path="/browse" component={BrowsePage} />
             <Route path="/dashboard/:uri" component={DashboardPage} />
             <Route path="/search" component={SearchPage} />
-            <Route path="/table_detail/:cluster/:database/:schema/:table" component={TableDetail} />
+            <Route
+              path="/table_detail/:cluster/:database/:schema/:table"
+              component={TableDetail}
+            />
             <Route path="/user/:userId" component={ProfilePage} />
             <Route path="/404" component={NotFoundPage} />
             <Route path="/" component={HomePage} />
           </Switch>
           <Footer />
-        </main>
+        </div>
       </Router>
     </Provider>
-  </DocumentTitle>
-  , document.getElementById('content') || document.createElement('div'),
+  </DocumentTitle>,
+  document.getElementById('content') || document.createElement('div')
 );

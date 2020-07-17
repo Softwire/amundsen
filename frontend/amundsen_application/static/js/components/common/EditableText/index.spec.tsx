@@ -1,16 +1,18 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 import * as ReactMarkdown from 'react-markdown';
 import * as autosize from 'autosize';
 
 import { shallow } from 'enzyme';
-import EditableText, { EditableTextProps } from '.';
 import {
   CANCEL_BUTTON_TEXT,
   REFRESH_BUTTON_TEXT,
   REFRESH_MESSAGE,
-  UPDATE_BUTTON_TEXT
+  UPDATE_BUTTON_TEXT,
 } from 'components/common/EditableText/constants';
-
+import EditableText, { EditableTextProps } from '.';
 
 describe('EditableText', () => {
   const setup = (propOverrides?: Partial<EditableTextProps>) => {
@@ -30,11 +32,9 @@ describe('EditableText', () => {
   };
   const { props, wrapper } = setup();
   const instance = wrapper.instance();
-  const setEditModeSpy = jest.spyOn(props, "setEditMode");
-
+  const setEditModeSpy = jest.spyOn(props, 'setEditMode');
 
   describe('componentDidUpdate', () => {
-
     // TODO - figure out how to spy on library
     // it('calls autosize on the text area ', () => {
     //   const autosizeSpy = jest.spyOn(autosize, 'default');
@@ -55,12 +55,11 @@ describe('EditableText', () => {
         refreshValue: 'new value',
         value: 'different value',
       });
-      wrapper.instance().componentDidUpdate(props)
+      wrapper.instance().componentDidUpdate(props);
       const state = wrapper.state();
       expect(state.isDisabled).toBe(true);
     });
   });
-
 
   describe('exitEditMode', () => {
     it('updates the state', () => {
@@ -70,13 +69,10 @@ describe('EditableText', () => {
       expect(wrapper.state()).toMatchObject({
         isDisabled: false,
       });
-    })
+    });
   });
 
-
   describe('enterEditMode', () => {
-
-
     it('it calls setEditMode with a value of true', () => {
       const { props, wrapper } = setup();
       const instance = wrapper.instance();
@@ -93,19 +89,18 @@ describe('EditableText', () => {
       expect(setStateSpy).toHaveBeenCalledWith({
         value: props.refreshValue,
         isDisabled: false,
-        refreshValue: undefined
+        refreshValue: undefined,
       });
-    })
+    });
   });
-
 
   // TODO - Figure out how to use refs in jest
   // describe('updateText', () => {
-    // it('calls onSubmitValue', () => {
-      // const onSubmitValueSpy = jest.spyOn(props, 'onSubmitValue');
-      // instance.updateText();
-      // expect(onSubmitValueSpy).toHaveBeenCalled();
-    // })
+  // it('calls onSubmitValue', () => {
+  // const onSubmitValueSpy = jest.spyOn(props, 'onSubmitValue');
+  // instance.updateText();
+  // expect(onSubmitValueSpy).toHaveBeenCalled();
+  // })
   // });
 
   describe('render', () => {
@@ -116,11 +111,12 @@ describe('EditableText', () => {
       });
       const instance = wrapper.instance();
 
-
       it('renders a ReactMarkdown component', () => {
         const markdown = wrapper.find(ReactMarkdown);
         expect(markdown.exists()).toBe(true);
-        expect(markdown.props()).toMatchObject({ source: wrapper.state().value });
+        expect(markdown.props()).toMatchObject({
+          source: wrapper.state().value,
+        });
       });
 
       it('renders an edit link if it is editable and the text is empty', () => {
@@ -128,7 +124,7 @@ describe('EditableText', () => {
         expect(editLink.exists()).toBe(true);
         expect(editLink.props()).toMatchObject({
           onClick: instance.enterEditMode,
-        })
+        });
       });
 
       it('does not render an edit link if it is not editable', () => {
@@ -139,7 +135,6 @@ describe('EditableText', () => {
     });
 
     describe('in edit mode', () => {
-
       it('renders a textarea ', () => {
         const textarea = wrapper.find('textarea');
         expect(textarea.exists()).toBe(true);
@@ -168,7 +163,7 @@ describe('EditableText', () => {
         expect(updateButton.text()).toMatch(UPDATE_BUTTON_TEXT);
         expect(updateButton.props()).toMatchObject({
           onClick: instance.updateText,
-        })
+        });
       });
 
       it('renders the cancel button', () => {
@@ -176,8 +171,8 @@ describe('EditableText', () => {
         expect(cancelButton.text()).toMatch(CANCEL_BUTTON_TEXT);
         expect(cancelButton.props()).toMatchObject({
           onClick: instance.exitEditMode,
-        })
+        });
       });
-    })
+    });
   });
 });

@@ -2,18 +2,19 @@ import { PeopleUser } from './User';
 import { Badge } from './Tags';
 
 export enum ResourceType {
-  table = "table",
-  user = "user",
-  dashboard = "dashboard",
-};
+  table = 'table',
+  user = 'user',
+  dashboard = 'dashboard',
+  query = 'query',
+}
 
 export const DEFAULT_RESOURCE_TYPE = ResourceType.table;
 
 export interface Resource {
   type: ResourceType;
-};
+}
 
-export interface DashboardResource extends Resource  {
+export interface DashboardResource extends Resource {
   type: ResourceType.dashboard;
   cluster: string;
   description: string;
@@ -40,10 +41,17 @@ export interface TableResource extends Resource {
   schema: string;
   schema_description?: string;
   badges?: Badge[];
-};
+}
 
 export interface UserResource extends Resource, PeopleUser {
   type: ResourceType.user;
+}
+
+export interface QueryResource extends Resource {
+  type: ResourceType.query;
+  name: string;
+  query_text: string;
+  url: string;
 }
 
 export interface ResourceDict<T> {

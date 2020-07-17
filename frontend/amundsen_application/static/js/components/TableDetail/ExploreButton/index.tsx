@@ -1,3 +1,6 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 
 import { logClick } from 'ducks/utilMethods';
@@ -18,16 +21,17 @@ class ExploreButton extends React.Component<ExploreButtonProps> {
     return (
       <a
         className="btn btn-default btn-lg"
-        href={ url }
+        href={url}
         role="button"
         target="_blank"
         id="explore-sql"
-        onClick={ logClick }
+        onClick={logClick}
+        rel="noreferrer"
       >
         Explore
       </a>
     );
   }
-};
+}
 
 export default ExploreButton;

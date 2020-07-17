@@ -1,3 +1,6 @@
+# Copyright Contributors to the Amundsen project.
+# SPDX-License-Identifier: Apache-2.0
+
 import abc
 import logging
 
@@ -42,3 +45,14 @@ class RestApiQuerySeed(BaseRestApiQuery):
         # type: () -> Iterator[Dict[str, Any]]
 
         return iter(self._seed_record)
+
+
+class EmptyRestApiQuerySeed(RestApiQuerySeed):
+    """
+    Sometimes there simply isn't a record to seed with.
+    """
+
+    def __init__(self):
+        # type: () -> None
+
+        super(EmptyRestApiQuerySeed, self).__init__([{'empty_rest_api_query_seed': 1}])

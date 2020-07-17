@@ -1,11 +1,7 @@
-import * as qs from 'simple-query-string';
-
+import { ResourceType } from 'interfaces/Resources';
 import * as DateUtils from './dateUtils';
 import * as LogUtils from './logUtils';
 import * as NavigationUtils from './navigationUtils';
-
-import { ResourceType } from 'interfaces/Resources';
-
 
 describe('navigationUtils', () => {
   describe('updateSearchUrl', () => {
@@ -17,7 +13,9 @@ describe('navigationUtils', () => {
 
     beforeAll(() => {
       mockUrl = 'testUrl';
-      generateSearchUrlSpy = jest.spyOn(NavigationUtils, 'generateSearchUrl').mockReturnValue(mockUrl);
+      generateSearchUrlSpy = jest
+        .spyOn(NavigationUtils, 'generateSearchUrl')
+        .mockReturnValue(mockUrl);
       historyReplaceSpy = jest.spyOn(NavigationUtils.BrowserHistory, 'replace');
       historyPushSpy = jest.spyOn(NavigationUtils.BrowserHistory, 'push');
       searchParams = {
@@ -64,7 +62,7 @@ describe('navigationUtils', () => {
 
     afterAll(() => {
       generateSearchUrlSpy.mockRestore();
-    })
+    });
   });
 
   describe('generaSearchUrl', () => {
@@ -89,8 +87,8 @@ describe('navigationUtils', () => {
         resource: testResource,
         index: 0,
         filters: {
-          [testResource]: {'column': 'column_name' }
-        }
+          [testResource]: { column: 'column_name' },
+        },
       };
       url = NavigationUtils.generateSearchUrl(searchParams);
       expect(url.includes('term=')).toBe(false);
@@ -115,8 +113,8 @@ describe('navigationUtils', () => {
         resource: testResource,
         index: 0,
         filters: {
-          [testResource]: { 'column': 'column_name' }
-        }
+          [testResource]: { column: 'column_name' },
+        },
       };
       url = NavigationUtils.generateSearchUrl(searchParams);
       const expectedFilterString = `%7B%22column%22%3A%22column_name%22%7D`;
@@ -128,7 +126,8 @@ describe('navigationUtils', () => {
   describe('buildDashboardURL', () => {
     it('encodes the passed URI for safe use on the URL bar', () => {
       const testURI = 'product_dashboard://cluster.groupID/dashboardID';
-      const expected = '/dashboard/product_dashboard%3A%2F%2Fcluster.groupID%2FdashboardID';
+      const expected =
+        '/dashboard/product_dashboard%3A%2F%2Fcluster.groupID%2FdashboardID';
       const actual = NavigationUtils.buildDashboardURL(testURI);
 
       expect(actual).toEqual(expected);
@@ -136,29 +135,30 @@ describe('navigationUtils', () => {
   });
 });
 
-
 describe('dateUtils', () => {
   describe('getMomentDate', () => {
-
     it('parses a timestamp', () => {
       const config = { timestamp: 1580421964000 };
       const moment = DateUtils.getMomentDate(config);
       const dateString = moment.format('MMM DD, YYYY');
-      expect(dateString).toEqual('Jan 30, 2020')
+      expect(dateString).toEqual('Jan 30, 2020');
     });
 
     it('parses an epoch timestamp', () => {
       const config = { epochTimestamp: 1580421964 };
       const moment = DateUtils.getMomentDate(config);
       const dateString = moment.format('MMM DD, YYYY');
-      expect(dateString).toEqual('Jan 30, 2020')
+      expect(dateString).toEqual('Jan 30, 2020');
     });
 
     it('parses an date string', () => {
-      const config = { dateString: "2020-Jan-30", dateStringFormat: "YYYY-MMM-DD" };
+      const config = {
+        dateString: '2020-Jan-30',
+        dateStringFormat: 'YYYY-MMM-DD',
+      };
       const moment = DateUtils.getMomentDate(config);
       const dateString = moment.format('MMM DD, YYYY');
-      expect(dateString).toEqual('Jan 30, 2020')
+      expect(dateString).toEqual('Jan 30, 2020');
     });
   });
 
@@ -166,7 +166,7 @@ describe('dateUtils', () => {
     it('formats a date to the default format', () => {
       const config = { timestamp: 1580421964000 };
       const dateString = DateUtils.formatDate(config);
-      expect(dateString).toEqual('Jan 30, 2020')
+      expect(dateString).toEqual('Jan 30, 2020');
     });
   });
 
@@ -175,15 +175,15 @@ describe('dateUtils', () => {
       const config = { timestamp: 1580421964000 };
       const dateString = DateUtils.formatDateTimeShort(config);
       // This test may fail in your IDE if your timezone is not set to GMT
-      expect(dateString).toEqual('Jan 30, 2020 10pm GMT')
+      expect(dateString).toEqual('Jan 30, 2020 10pm GMT');
     });
   });
 
   describe('formatDateTimeLong', () => {
     const config = { timestamp: 1580421964000 };
-      const dateString = DateUtils.formatDateTimeLong(config);
-      expect(dateString).toEqual('January 30th 2020 at 10:06:04 pm')
-  })
+    const dateString = DateUtils.formatDateTimeLong(config);
+    expect(dateString).toEqual('January 30th 2020 at 10:06:04 pm');
+  });
 });
 
 describe('logUtils', () => {
@@ -208,14 +208,18 @@ describe('logUtils', () => {
       searchString = `uri=${uri}&filters=${mockFilter}&source=test_source&index=10`;
       replaceStateSpy.mockClear();
       LogUtils.getLoggingParams(searchString);
-      expect(replaceStateSpy).toHaveBeenCalledWith({}, '', `${window.location.origin}${window.location.pathname}?uri=${uri}&filters=${mockFilter}`);
+      expect(replaceStateSpy).toHaveBeenCalledWith(
+        {},
+        '',
+        `${window.location.origin}${window.location.pathname}?uri=${uri}&filters=${mockFilter}`
+      );
     });
 
     it('does not clear the logging params if they do not exist', () => {
       searchString = '';
       replaceStateSpy.mockClear();
       LogUtils.getLoggingParams(searchString);
-      expect(replaceStateSpy).not.toHaveBeenCalled()
+      expect(replaceStateSpy).not.toHaveBeenCalled();
     });
   });
 });

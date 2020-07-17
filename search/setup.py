@@ -1,8 +1,11 @@
+# Copyright Contributors to the Amundsen project.
+# SPDX-License-Identifier: Apache-2.0
+
 import os
 
 from setuptools import setup, find_packages
 
-__version__ = '2.3.3'
+__version__ = '2.4.0'
 
 requirements_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'requirements.txt')
 with open(requirements_path) as requirements_file:
@@ -14,7 +17,7 @@ setup(
     description='Search Service for Amundsen',
     url='https://github.com/lyft/amundsensearchlibrary.git',
     maintainer='Lyft',
-    maintainer_email='dp-tools@lyft.com',
+    maintainer_email='amundsen-dev@lyft.com',
     packages=find_packages(exclude=['tests*']),
     include_package_data=True,
     zip_safe=False,

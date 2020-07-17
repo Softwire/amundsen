@@ -15,8 +15,9 @@ export interface SearchParams {
 
 export const DEFAULT_SEARCH_ROUTE = '/search';
 
-export const generateSearchUrl = (searchParams: SearchParams) : string => {
-  const filtersForResource = searchParams.filters && searchParams.filters[searchParams.resource] || {};
+export const generateSearchUrl = (searchParams: SearchParams): string => {
+  const filtersForResource =
+    (searchParams.filters && searchParams.filters[searchParams.resource]) || {};
   const hasFilters = Object.keys(filtersForResource).length > 0;
 
   // If there is no search input return the search route url
@@ -31,6 +32,7 @@ export const generateSearchUrl = (searchParams: SearchParams) : string => {
     index: searchParams.index,
   };
   if (hasFilters) {
+    // eslint-disable-next-line @typescript-eslint/dot-notation
     queryStringValues['filters'] = filtersForResource;
   }
 
@@ -38,7 +40,10 @@ export const generateSearchUrl = (searchParams: SearchParams) : string => {
   return `${DEFAULT_SEARCH_ROUTE}?${urlParams}`;
 };
 
-export const updateSearchUrl = (searchParams: SearchParams, replace: boolean = false) => {
+export const updateSearchUrl = (
+  searchParams: SearchParams,
+  replace: boolean = false
+) => {
   const newUrl = generateSearchUrl(searchParams);
 
   if (replace) {
@@ -55,4 +60,4 @@ export const updateSearchUrl = (searchParams: SearchParams, replace: boolean = f
  */
 export const buildDashboardURL = (URI: string) => {
   return `/dashboard/${encodeURIComponent(URI)}`;
-}
+};

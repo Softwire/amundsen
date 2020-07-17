@@ -1,20 +1,49 @@
-import { OwnerDict, PreviewData, PreviewQueryParams, TableMetadata, Tag, User } from 'interfaces';
+import {
+  DashboardResource,
+  OwnerDict,
+  PreviewData,
+  PreviewQueryParams,
+  TableMetadata,
+  Tag,
+  User,
+} from 'interfaces';
 
 import {
-  GetTableData, GetTableDataRequest, GetTableDataResponse,
-  GetTableDescription, GetTableDescriptionRequest, GetTableDescriptionResponse,
-  UpdateTableDescription, UpdateTableDescriptionRequest,
-  GetColumnDescription, GetColumnDescriptionResponse, GetColumnDescriptionRequest,
-  UpdateColumnDescription, UpdateColumnDescriptionRequest,
-  GetLastIndexed, GetLastIndexedRequest, GetLastIndexedResponse,
-  GetPreviewData, GetPreviewDataRequest, GetPreviewDataResponse,
+  GetTableData,
+  GetTableDataRequest,
+  GetTableDataResponse,
+  GetTableDashboards,
+  GetTableDashboardsResponse,
+  GetTableDescription,
+  GetTableDescriptionRequest,
+  GetTableDescriptionResponse,
+  UpdateTableDescription,
+  UpdateTableDescriptionRequest,
+  GetColumnDescription,
+  GetColumnDescriptionResponse,
+  GetColumnDescriptionRequest,
+  UpdateColumnDescription,
+  UpdateColumnDescriptionRequest,
+  GetLastIndexed,
+  GetLastIndexedRequest,
+  GetLastIndexedResponse,
+  GetPreviewData,
+  GetPreviewDataRequest,
+  GetPreviewDataResponse,
   UpdateTableOwner,
 } from './types';
 
-import tableOwnersReducer, { initialOwnersState, TableOwnerReducerState } from './owners/reducer';
+import tableOwnersReducer, {
+  initialOwnersState,
+  TableOwnerReducerState,
+} from './owners/reducer';
 
 /* ACTIONS */
-export function getTableData(key: string, searchIndex?: string, source?: string): GetTableDataRequest {
+export function getTableData(
+  key: string,
+  searchIndex?: string,
+  source?: string
+): GetTableDataRequest {
   return {
     payload: {
       key,
@@ -23,14 +52,24 @@ export function getTableData(key: string, searchIndex?: string, source?: string)
     },
     type: GetTableData.REQUEST,
   };
-};
+}
 export function getTableDataFailure(): GetTableDataResponse {
   return {
     type: GetTableData.FAILURE,
-    payload: { data: initialTableDataState, owners: {}, statusCode: 500, tags: [] }
-  }
+    payload: {
+      data: initialTableDataState,
+      owners: {},
+      statusCode: 500,
+      tags: [],
+    },
+  };
 }
-export function getTableDataSuccess(data: TableMetadata, owners: OwnerDict, statusCode: number, tags: Tag[]): GetTableDataResponse {
+export function getTableDataSuccess(
+  data: TableMetadata,
+  owners: OwnerDict,
+  statusCode: number,
+  tags: Tag[]
+): GetTableDataResponse {
   return {
     type: GetTableData.SUCCESS,
     payload: {
@@ -38,11 +77,27 @@ export function getTableDataSuccess(data: TableMetadata, owners: OwnerDict, stat
       owners,
       statusCode,
       tags,
-    }
-  }
+    },
+  };
 }
 
-export function getTableDescription(onSuccess?: () => any, onFailure?: () => any): GetTableDescriptionRequest {
+export function getTableDashboardsResponse(
+  dashboards: DashboardResource[],
+  errorMessage: string = ''
+): GetTableDashboardsResponse {
+  return {
+    type: GetTableDashboards.RESPONSE,
+    payload: {
+      dashboards,
+      errorMessage,
+    },
+  };
+}
+
+export function getTableDescription(
+  onSuccess?: () => any,
+  onFailure?: () => any
+): GetTableDescriptionRequest {
   return {
     payload: {
       onSuccess,
@@ -50,26 +105,33 @@ export function getTableDescription(onSuccess?: () => any, onFailure?: () => any
     },
     type: GetTableDescription.REQUEST,
   };
-};
-export function getTableDescriptionFailure(tableMetadata: TableMetadata): GetTableDescriptionResponse {
+}
+export function getTableDescriptionFailure(
+  tableMetadata: TableMetadata
+): GetTableDescriptionResponse {
   return {
     type: GetTableDescription.FAILURE,
     payload: {
-      tableMetadata
+      tableMetadata,
     },
   };
-};
-export function getTableDescriptionSuccess(tableMetadata: TableMetadata): GetTableDescriptionResponse {
+}
+export function getTableDescriptionSuccess(
+  tableMetadata: TableMetadata
+): GetTableDescriptionResponse {
   return {
     type: GetTableDescription.SUCCESS,
     payload: {
-      tableMetadata
+      tableMetadata,
     },
   };
-};
+}
 
-
-export function updateTableDescription(newValue: string, onSuccess?: () => any, onFailure?: () => any): UpdateTableDescriptionRequest {
+export function updateTableDescription(
+  newValue: string,
+  onSuccess?: () => any,
+  onFailure?: () => any
+): UpdateTableDescriptionRequest {
   return {
     payload: {
       newValue,
@@ -78,9 +140,13 @@ export function updateTableDescription(newValue: string, onSuccess?: () => any, 
     },
     type: UpdateTableDescription.REQUEST,
   };
-};
+}
 
-export function getColumnDescription(columnIndex: number, onSuccess?: () => any, onFailure?: () => any): GetColumnDescriptionRequest {
+export function getColumnDescription(
+  columnIndex: number,
+  onSuccess?: () => any,
+  onFailure?: () => any
+): GetColumnDescriptionRequest {
   return {
     payload: {
       onSuccess,
@@ -89,25 +155,34 @@ export function getColumnDescription(columnIndex: number, onSuccess?: () => any,
     },
     type: GetColumnDescription.REQUEST,
   };
-};
-export function getColumnDescriptionFailure(tableMetadata: TableMetadata): GetColumnDescriptionResponse {
+}
+export function getColumnDescriptionFailure(
+  tableMetadata: TableMetadata
+): GetColumnDescriptionResponse {
   return {
     type: GetColumnDescription.FAILURE,
     payload: {
-      tableMetadata
+      tableMetadata,
     },
   };
-};
-export function getColumnDescriptionSuccess(tableMetadata: TableMetadata): GetColumnDescriptionResponse {
+}
+export function getColumnDescriptionSuccess(
+  tableMetadata: TableMetadata
+): GetColumnDescriptionResponse {
   return {
     type: GetColumnDescription.SUCCESS,
     payload: {
-      tableMetadata
+      tableMetadata,
     },
   };
-};
+}
 
-export function updateColumnDescription(newValue: string, columnIndex: number, onSuccess?: () => any, onFailure?: () => any): UpdateColumnDescriptionRequest {
+export function updateColumnDescription(
+  newValue: string,
+  columnIndex: number,
+  onSuccess?: () => any,
+  onFailure?: () => any
+): UpdateColumnDescriptionRequest {
   return {
     payload: {
       newValue,
@@ -117,27 +192,34 @@ export function updateColumnDescription(newValue: string, columnIndex: number, o
     },
     type: UpdateColumnDescription.REQUEST,
   };
-};
+}
 
 export function getLastIndexed(): GetLastIndexedRequest {
   return { type: GetLastIndexed.REQUEST };
-};
+}
 export function getLastIndexedFailure(): GetLastIndexedResponse {
   return { type: GetLastIndexed.FAILURE };
-};
-export function getLastIndexedSuccess(lastIndexedEpoch: number): GetLastIndexedResponse {
+}
+export function getLastIndexedSuccess(
+  lastIndexedEpoch: number
+): GetLastIndexedResponse {
   return {
     type: GetLastIndexed.SUCCESS,
     payload: {
       lastIndexedEpoch,
-    }
+    },
   };
-};
+}
 
-export function getPreviewData(queryParams: PreviewQueryParams): GetPreviewDataRequest {
+export function getPreviewData(
+  queryParams: PreviewQueryParams
+): GetPreviewDataRequest {
   return { payload: { queryParams }, type: GetPreviewData.REQUEST };
-};
-export function getPreviewDataFailure(data: PreviewData, status: number): GetPreviewDataResponse {
+}
+export function getPreviewDataFailure(
+  data: PreviewData,
+  status: number
+): GetPreviewDataResponse {
   return {
     type: GetPreviewData.FAILURE,
     payload: {
@@ -145,8 +227,11 @@ export function getPreviewDataFailure(data: PreviewData, status: number): GetPre
       status,
     },
   };
-};
-export function getPreviewDataSuccess(data: PreviewData, status: number): GetPreviewDataResponse {
+}
+export function getPreviewDataSuccess(
+  data: PreviewData,
+  status: number
+): GetPreviewDataResponse {
   return {
     type: GetPreviewData.SUCCESS,
     payload: {
@@ -154,10 +239,15 @@ export function getPreviewDataSuccess(data: PreviewData, status: number): GetPre
       status,
     },
   };
-};
+}
 
 /* REDUCER */
 export interface TableMetadataReducerState {
+  dashboards?: {
+    isLoading: boolean;
+    dashboards: DashboardResource[];
+    errorMessage?: string;
+  };
   isLoading: boolean;
   lastIndexed: number;
   preview: {
@@ -167,7 +257,7 @@ export interface TableMetadataReducerState {
   statusCode: number;
   tableData: TableMetadata;
   tableOwners: TableOwnerReducerState;
-};
+}
 
 export const initialPreviewState = {
   data: {},
@@ -178,7 +268,6 @@ export const initialTableDataState: TableMetadata = {
   badges: [],
   cluster: '',
   columns: [],
-  dashboards: [],
   database: '',
   is_editable: false,
   is_view: false,
@@ -192,7 +281,7 @@ export const initialTableDataState: TableMetadata = {
   table_readers: [],
   source: { source: '', source_type: '' },
   watermarks: [],
-  programmatic_descriptions: []
+  programmatic_descriptions: [],
 };
 
 export const initialState: TableMetadataReducerState = {
@@ -204,16 +293,22 @@ export const initialState: TableMetadataReducerState = {
   tableOwners: initialOwnersState,
 };
 
-export default function reducer(state: TableMetadataReducerState = initialState, action): TableMetadataReducerState {
+export default function reducer(
+  state: TableMetadataReducerState = initialState,
+  action
+): TableMetadataReducerState {
   switch (action.type) {
-    case GetTableData.REQUEST:
+    case GetTableDashboards.RESPONSE:
       return {
         ...state,
-        isLoading: true,
-        preview: initialPreviewState,
-        tableData: initialTableDataState,
-        tableOwners: tableOwnersReducer(state.tableOwners, action),
+        dashboards: {
+          isLoading: false,
+          dashboards: action.payload.dashboards,
+          errorMessage: action.payload.errorMessage,
+        },
       };
+    case GetTableData.REQUEST:
+      return initialState;
     case GetTableData.FAILURE:
       return {
         ...state,
@@ -233,21 +328,33 @@ export default function reducer(state: TableMetadataReducerState = initialState,
       };
     case GetTableDescription.FAILURE:
     case GetTableDescription.SUCCESS:
-      return { ...state, tableData: (<GetTableDescriptionResponse>action).payload.tableMetadata };
+      return {
+        ...state,
+        tableData: (<GetTableDescriptionResponse>action).payload.tableMetadata,
+      };
     case GetColumnDescription.FAILURE:
     case GetColumnDescription.SUCCESS:
-      return { ...state, tableData: (<GetColumnDescriptionResponse>action).payload.tableMetadata };
+      return {
+        ...state,
+        tableData: (<GetColumnDescriptionResponse>action).payload.tableMetadata,
+      };
     case GetLastIndexed.FAILURE:
       return { ...state, lastIndexed: null };
     case GetLastIndexed.SUCCESS:
-      return { ...state, lastIndexed: (<GetLastIndexedResponse>action).payload.lastIndexedEpoch };
+      return {
+        ...state,
+        lastIndexed: (<GetLastIndexedResponse>action).payload.lastIndexedEpoch,
+      };
     case GetPreviewData.FAILURE:
     case GetPreviewData.SUCCESS:
       return { ...state, preview: (<GetPreviewDataResponse>action).payload };
     case UpdateTableOwner.REQUEST:
     case UpdateTableOwner.FAILURE:
     case UpdateTableOwner.SUCCESS:
-      return { ...state, tableOwners: tableOwnersReducer(state.tableOwners, action) };
+      return {
+        ...state,
+        tableOwners: tableOwnersReducer(state.tableOwners, action),
+      };
     default:
       return state;
   }

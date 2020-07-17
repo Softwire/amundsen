@@ -1,10 +1,13 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
-import { bindActionCreators } from 'redux'
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { ResourceType, Tag, SearchType } from 'interfaces';
 
-import { submitSearchResource } from 'ducks/search/reducer';
-import { SubmitSearchResourceRequest } from 'ducks/search/types';
+import { updateSearchState } from 'ducks/search/reducer';
+import { UpdateSearchStateRequest } from 'ducks/search/types';
 import { logClick } from 'ducks/utilMethods';
 
 import './styles.scss';
@@ -15,15 +18,14 @@ interface OwnProps {
 }
 
 export interface DispatchFromProps {
-  searchTag: (tagName: string) => SubmitSearchResourceRequest;
+  searchTag: (tagName: string) => UpdateSearchStateRequest;
 }
 
 export type TagInfoProps = OwnProps & DispatchFromProps;
 
-
 export class TagInfo extends React.Component<TagInfoProps> {
   static defaultProps = {
-    compact: true
+    compact: true,
   };
 
   onClick = (e) => {
@@ -40,32 +42,36 @@ export class TagInfo extends React.Component<TagInfoProps> {
 
     return (
       <button
-        id={ `tag::${name}` }
-        role="button"
-        className={ "btn tag-button" + (this.props.compact ? " compact" : "") }
-        onClick={ this.onClick }
+        id={`tag::${name}`}
+        className={'btn tag-button' + (this.props.compact ? ' compact' : '')}
+        onClick={this.onClick}
       >
-        <span className="tag-name">{ name }</span>
-        {
-          !this.props.compact &&
-            <span className="tag-count">{ this.props.data.tag_count }</span>
-        }
+        <span className="tag-name">{name}</span>
+        {!this.props.compact && (
+          <span className="tag-count">{this.props.data.tag_count}</span>
+        )}
       </button>
     );
   }
 }
 
 export const mapDispatchToProps = (dispatch: any) => {
-  return bindActionCreators({
-    searchTag: (tagName: string) => submitSearchResource({
-      resourceFilters: { 'tag': tagName },
-      resource: ResourceType.table,
-      pageIndex: 0,
-      searchTerm: '',
-      searchType: SearchType.FILTER,
-      updateUrl: true,
-    })
-  }, dispatch);
+  return bindActionCreators(
+    {
+      searchTag: (tagName: string) =>
+        updateSearchState({
+          filters: {
+            [ResourceType.dashboard]: { tag: tagName },
+            [ResourceType.table]: { tag: tagName },
+          },
+          submitSearch: true,
+        }),
+    },
+    dispatch
+  );
 };
 
-export default connect<null, DispatchFromProps, OwnProps>(null, mapDispatchToProps)(TagInfo);
+export default connect<null, DispatchFromProps, OwnProps>(
+  null,
+  mapDispatchToProps
+)(TagInfo);

@@ -1,3 +1,6 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 import EntityCardSection, { EntityCardSectionProps } from './EntityCardSection';
 
@@ -8,19 +11,22 @@ export interface EntityCardProps {
   sections: EntityCardSectionProps[];
 }
 
-const EntityCard: React.SFC<EntityCardProps> = ({ sections }) => {
+const EntityCard: React.SFC<EntityCardProps> = ({
+  sections,
+}: EntityCardProps) => {
   const cardItems = sections.map((entry, index) => {
     return (
-      <EntityCardSection key={`section:${index}`} title={ entry.title } infoText={ entry.infoText }
-        contentRenderer={ entry.contentRenderer } isEditable={ entry.isEditable }/>
+      <EntityCardSection
+        key={`section:${index}`}
+        title={entry.title}
+        infoText={entry.infoText}
+        contentRenderer={entry.contentRenderer}
+        isEditable={entry.isEditable}
+      />
     );
   });
 
-  return (
-    <div className="entity-card">
-      { cardItems }
-    </div>
-  );
+  return <div className="entity-card">{cardItems}</div>;
 };
 
 EntityCard.defaultProps = {
