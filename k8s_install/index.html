@@ -13,10 +13,10 @@
         <meta name="description" content="Amundsen is a metadata driven application for improving the productivity of data analysts, data scientists and engineers when interacting with data.">
       
       
-        <link rel="canonical" href="https://lyft.github.io/amundsen/k8s_install/">
+        <link rel="canonical" href="https://www.amundsen.io/amundsen/k8s_install/">
       
       
-        <meta name="author" content="Lyft, Inc.">
+        <meta name="author" content="Amundsen Project Authors.">
       
       
         <meta name="lang:clipboard.copy" content="Copy to clipboard">
@@ -100,7 +100,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="https://lyft.github.io/amundsen/" title="Amundsen" aria-label="Amundsen" class="md-header-nav__button md-logo">
+        <a href="https://www.amundsen.io/amundsen/" title="Amundsen" aria-label="Amundsen" class="md-header-nav__button md-logo">
           
             <img alt="logo" src="../img/logos/amundsen_mark_orange.svg" width="24" height="24">
           
@@ -159,7 +159,7 @@
 
   
 
-<a href="https://github.com/lyft/Amundsen/" title="Go to repository" class="md-source" data-md-source="github">
+<a href="https://github.com/amundsen-io/amundsen/" title="Go to repository" class="md-source" data-md-source="github">
   
     <div class="md-source__icon">
       <svg viewBox="0 0 24 24" width="24" height="24">
@@ -265,7 +265,7 @@
                   <div class="md-sidebar__inner">
                     <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="https://lyft.github.io/amundsen/" title="Amundsen" class="md-nav__button md-logo">
+    <a href="https://www.amundsen.io/amundsen/" title="Amundsen" class="md-nav__button md-logo">
       
         <img alt="logo" src="../img/logos/amundsen_mark_orange.svg" width="48" height="48">
       
@@ -279,7 +279,7 @@
 
   
 
-<a href="https://github.com/lyft/Amundsen/" title="Go to repository" class="md-source" data-md-source="github">
+<a href="https://github.com/amundsen-io/amundsen/" title="Go to repository" class="md-source" data-md-source="github">
   
     <div class="md-source__icon">
       <svg viewBox="0 0 24 24" width="24" height="24">
@@ -1256,13 +1256,13 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/lyft/Amundsen/edit/master/docs/k8s_install.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/amundsen-io/amundsen/edit/master/docs/k8s_install.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
                 <h1 id="amundsen-k8s-helm-charts">Amundsen K8s Helm Charts<a class="headerlink" href="#amundsen-k8s-helm-charts" title="Permanent link">&para;</a></h1>
-<p>Source code can be found <a href="https://github.com/lyft/amundsen">here</a></p>
+<p>Source code can be found <a href="https://github.com/amundsen-io/amundsen">here</a></p>
 <h2 id="what-is-this">What is this?<a class="headerlink" href="#what-is-this" title="Permanent link">&para;</a></h2>
-<p>This is setup templates for deploying <a href="https://github.com/lyft/amundsen">amundsen</a> on <a href="https://kubernetes.io/">k8s (kubernetes)</a>, using <a href="https://helm.sh/">helm.</a> </p>
+<p>This is setup templates for deploying <a href="https://github.com/amundsen-io/amundsen">amundsen</a> on <a href="https://kubernetes.io/">k8s (kubernetes)</a>, using <a href="https://helm.sh/">helm.</a></p>
 <h2 id="how-do-i-get-started">How do I get started?<a class="headerlink" href="#how-do-i-get-started" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Make sure you have the following command line clients setup:<ul>
@@ -1766,27 +1766,28 @@
 </tbody>
 </table>
 <h2 id="neo4j-dbms-config">Neo4j DBMS Config?<a class="headerlink" href="#neo4j-dbms-config" title="Permanent link">&para;</a></h2>
-<p>You may want to override the default memory usage for Neo4J. In particular, if you&rsquo;re just test-driving a deployment and your node exits with status 137, you should set the usage to smaller values:
-<div class="highlight"><pre><span></span><code>config:
-  dbms:
-    heap_initial_size: 1G
-    heap_max_size: 2G
-    pagecache_size: 2G
-</code></pre></div></p>
-<p>With this values file, you can then install Amundsen using Helm 2 with:
+<p>You may want to override the default memory usage for Neo4J. In particular, if you&rsquo;re just test-driving a deployment and your node exits with status 137, you should set the usage to smaller values:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">config</span><span class="p">:</span>
+  <span class="nt">dbms</span><span class="p">:</span>
+    <span class="nt">heap_initial_size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1G</span>
+    <span class="nt">heap_max_size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2G</span>
+    <span class="nt">pagecache_size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2G</span>
+</code></pre></div>
+
+<p>With this values file, you can then install Amundsen using Helm 2 with:</p>
 <div class="highlight"><pre><span></span><code>helm install ./templates/helm --values impl/helm/dev/values.yaml
-</code></pre></div></p>
-<p>For Helm 3 it&rsquo;s now mandatory to specify a <a href="https://helm.sh/docs/intro/using_helm/#helm-install-installing-a-package">chart reference name</a> e.g. <code>my-amundsen</code>: 
+</code></pre></div>
+
+<p>For Helm 3 it&rsquo;s now mandatory to specify a <a href="https://helm.sh/docs/intro/using_helm/#helm-install-installing-a-package">chart reference name</a> e.g. <code>my-amundsen</code>:</p>
 <div class="highlight"><pre><span></span><code>helm install my-amundsen ./templates/helm --values impl/helm/dev/values.yaml
-</code></pre></div></p>
+</code></pre></div>
+
 <h2 id="other-notes">Other Notes<a class="headerlink" href="#other-notes" title="Permanent link">&para;</a></h2>
 <ul>
 <li>For aws setup, you will also need to setup the <a href="https://github.com/kubernetes-incubator/external-dns">external-dns plugin</a></li>
-<li>There is an existing helm chart for neo4j, but, it is missing some features necessary to for use such as:<ul>
+<li>There is an existing helm chart for neo4j, but, it is missing some features necessary to for use such as:</li>
 <li><a href="https://github.com/helm/charts/issues/21441">[stable/neo4j] make neo4j service definition more extensible</a>; without this, it is not possible to setup external load balancers, external-dns, etc</li>
 <li><a href="https://github.com/helm/charts/issues/21439">[stable/neo4j] allow custom configuration of neo4j</a>; without this, custom configuration is not possible which includes setting configmap based settings, which also includes turning on apoc.</li>
-</ul>
-</li>
 </ul>
                 
                   
@@ -1846,7 +1847,7 @@
       <div class="md-footer-copyright">
         
           <div class="md-footer-copyright__highlight">
-            Copyright &copy; 2020 Lyft, Inc.
+            Copyright &copy; 2018-2020 Amundsen Project Authors.
           </div>
         
         powered by
@@ -1859,13 +1860,13 @@
   <div class="md-footer-social">
     <link rel="stylesheet" href="../assets/fonts/font-awesome.css">
     
-      <a href="https://lyft.github.io/" target="_blank" rel="noopener" title="globe" class="md-footer-social__link fa fa-globe"></a>
+      <a href="https://www.amundsen.io/" target="_blank" rel="noopener" title="globe" class="md-footer-social__link fa fa-globe"></a>
     
-      <a href="https://github.com/lyft" target="_blank" rel="noopener" title="github-alt" class="md-footer-social__link fa fa-github-alt"></a>
+      <a href="https://github.com/amundsen-io" target="_blank" rel="noopener" title="github-alt" class="md-footer-social__link fa fa-github-alt"></a>
     
-      <a href="https://twitter.com/lyfteng" target="_blank" rel="noopener" title="twitter" class="md-footer-social__link fa fa-twitter"></a>
+      <a href="https://twitter.com/amundsenio" target="_blank" rel="noopener" title="twitter" class="md-footer-social__link fa fa-twitter"></a>
     
-      <a href="https://www.linkedin.com/company/lyft/" target="_blank" rel="noopener" title="linkedin" class="md-footer-social__link fa fa-linkedin"></a>
+      <a href="https://www.linkedin.com/company/the-linux-foundation/" target="_blank" rel="noopener" title="linkedin" class="md-footer-social__link fa fa-linkedin"></a>
     
   </div>
 

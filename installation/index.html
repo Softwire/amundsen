@@ -13,10 +13,10 @@
         <meta name="description" content="Amundsen is a metadata driven application for improving the productivity of data analysts, data scientists and engineers when interacting with data.">
       
       
-        <link rel="canonical" href="https://lyft.github.io/amundsen/installation/">
+        <link rel="canonical" href="https://www.amundsen.io/amundsen/installation/">
       
       
-        <meta name="author" content="Lyft, Inc.">
+        <meta name="author" content="Amundsen Project Authors.">
       
       
         <meta name="lang:clipboard.copy" content="Copy to clipboard">
@@ -100,7 +100,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="https://lyft.github.io/amundsen/" title="Amundsen" aria-label="Amundsen" class="md-header-nav__button md-logo">
+        <a href="https://www.amundsen.io/amundsen/" title="Amundsen" aria-label="Amundsen" class="md-header-nav__button md-logo">
           
             <img alt="logo" src="../img/logos/amundsen_mark_orange.svg" width="24" height="24">
           
@@ -159,7 +159,7 @@
 
   
 
-<a href="https://github.com/lyft/Amundsen/" title="Go to repository" class="md-source" data-md-source="github">
+<a href="https://github.com/amundsen-io/amundsen/" title="Go to repository" class="md-source" data-md-source="github">
   
     <div class="md-source__icon">
       <svg viewBox="0 0 24 24" width="24" height="24">
@@ -265,7 +265,7 @@
                   <div class="md-sidebar__inner">
                     <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="https://lyft.github.io/amundsen/" title="Amundsen" class="md-nav__button md-logo">
+    <a href="https://www.amundsen.io/amundsen/" title="Amundsen" class="md-nav__button md-logo">
       
         <img alt="logo" src="../img/logos/amundsen_mark_orange.svg" width="48" height="48">
       
@@ -279,7 +279,7 @@
 
   
 
-<a href="https://github.com/lyft/Amundsen/" title="Go to repository" class="md-source" data-md-source="github">
+<a href="https://github.com/amundsen-io/amundsen/" title="Go to repository" class="md-source" data-md-source="github">
   
     <div class="md-source__icon">
       <svg viewBox="0 0 24 24" width="24" height="24">
@@ -1210,7 +1210,7 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/lyft/Amundsen/edit/master/docs/installation.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/amundsen-io/amundsen/edit/master/docs/installation.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
                 <h1 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h1>
@@ -1218,8 +1218,8 @@
 <p>The following instructions are for setting up a version of Amundsen using Docker.</p>
 <ol>
 <li>Make sure you have at least 3GB available to docker. Install <code>docker</code> and  <code>docker-compose</code>.</li>
-<li>Clone <a href="https://github.com/lyft/amundsen">this repo</a> and its submodules by running:
-   <div class="highlight"><pre><span></span><code>$ git clone --recursive git@github.com:lyft/amundsen.git
+<li>Clone <a href="https://github.com/amundsen-io/amundsen">this repo</a> and its submodules by running:
+   <div class="highlight"><pre><span></span><code>$ git clone --recursive git@github.com:amundsen-io/amundsen.git
 </code></pre></div></li>
 <li>Enter the cloned directory and run:
     <div class="highlight"><pre><span></span><code><span class="c1"># For Neo4j Backend</span>
@@ -1229,12 +1229,12 @@ $ docker-compose -f docker-amundsen.yml up
 $ docker-compose -f docker-amundsen-atlas.yml up
 </code></pre></div></li>
 <li>
-<p>Ingest dummy data into Neo4j by doing the following: <em>(Please skip if you are using Atlas backend)</em></p>
+<p>Ingest provided sample data into Neo4j by doing the following: <em>(Please skip if you are using Atlas backend)</em></p>
 </li>
 <li>
-<p>Change directory to the <a href="https://github.com/lyft/amundsendatabuilder">amundsendatabuilder</a> submodule.</p>
+<p>In a separate terminal window, change directory to the <a href="https://github.com/amundsen-io/amundsendatabuilder">amundsendatabuilder</a> submodule.</p>
 </li>
-<li>Run the following commands in the <code>amundsendatabuilder</code> upstream directory:
+<li><code>sample_data_loader</code> python script included in <code>examples/</code> directory uses <em>elasticsearch client</em>, <em>pyhocon</em> and other libraries. Install the dependencies in a virtual env and run the script by following the commands below:
    <div class="highlight"><pre><span></span><code> $ python3 -m venv venv
  $ <span class="nb">source</span> venv/bin/activate  
  $ pip3 install -r requirements.txt
@@ -1353,7 +1353,7 @@ Atlas would be ready once you&rsquo;ll have the following output in the docker o
       <div class="md-footer-copyright">
         
           <div class="md-footer-copyright__highlight">
-            Copyright &copy; 2020 Lyft, Inc.
+            Copyright &copy; 2018-2020 Amundsen Project Authors.
           </div>
         
         powered by
@@ -1366,13 +1366,13 @@ Atlas would be ready once you&rsquo;ll have the following output in the docker o
   <div class="md-footer-social">
     <link rel="stylesheet" href="../assets/fonts/font-awesome.css">
     
-      <a href="https://lyft.github.io/" target="_blank" rel="noopener" title="globe" class="md-footer-social__link fa fa-globe"></a>
+      <a href="https://www.amundsen.io/" target="_blank" rel="noopener" title="globe" class="md-footer-social__link fa fa-globe"></a>
     
-      <a href="https://github.com/lyft" target="_blank" rel="noopener" title="github-alt" class="md-footer-social__link fa fa-github-alt"></a>
+      <a href="https://github.com/amundsen-io" target="_blank" rel="noopener" title="github-alt" class="md-footer-social__link fa fa-github-alt"></a>
     
-      <a href="https://twitter.com/lyfteng" target="_blank" rel="noopener" title="twitter" class="md-footer-social__link fa fa-twitter"></a>
+      <a href="https://twitter.com/amundsenio" target="_blank" rel="noopener" title="twitter" class="md-footer-social__link fa fa-twitter"></a>
     
-      <a href="https://www.linkedin.com/company/lyft/" target="_blank" rel="noopener" title="linkedin" class="md-footer-social__link fa fa-linkedin"></a>
+      <a href="https://www.linkedin.com/company/the-linux-foundation/" target="_blank" rel="noopener" title="linkedin" class="md-footer-social__link fa fa-linkedin"></a>
     
   </div>
 

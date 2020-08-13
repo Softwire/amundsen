@@ -13,10 +13,10 @@
         <meta name="description" content="Amundsen is a metadata driven application for improving the productivity of data analysts, data scientists and engineers when interacting with data.">
       
       
-        <link rel="canonical" href="https://lyft.github.io/amundsen/authentication/oidc/">
+        <link rel="canonical" href="https://www.amundsen.io/amundsen/authentication/oidc/">
       
       
-        <meta name="author" content="Lyft, Inc.">
+        <meta name="author" content="Amundsen Project Authors.">
       
       
         <meta name="lang:clipboard.copy" content="Copy to clipboard">
@@ -100,7 +100,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="https://lyft.github.io/amundsen/" title="Amundsen" aria-label="Amundsen" class="md-header-nav__button md-logo">
+        <a href="https://www.amundsen.io/amundsen/" title="Amundsen" aria-label="Amundsen" class="md-header-nav__button md-logo">
           
             <img alt="logo" src="../../img/logos/amundsen_mark_orange.svg" width="24" height="24">
           
@@ -159,7 +159,7 @@
 
   
 
-<a href="https://github.com/lyft/Amundsen/" title="Go to repository" class="md-source" data-md-source="github">
+<a href="https://github.com/amundsen-io/amundsen/" title="Go to repository" class="md-source" data-md-source="github">
   
     <div class="md-source__icon">
       <svg viewBox="0 0 24 24" width="24" height="24">
@@ -265,7 +265,7 @@
                   <div class="md-sidebar__inner">
                     <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="https://lyft.github.io/amundsen/" title="Amundsen" class="md-nav__button md-logo">
+    <a href="https://www.amundsen.io/amundsen/" title="Amundsen" class="md-nav__button md-logo">
       
         <img alt="logo" src="../../img/logos/amundsen_mark_orange.svg" width="48" height="48">
       
@@ -279,7 +279,7 @@
 
   
 
-<a href="https://github.com/lyft/Amundsen/" title="Go to repository" class="md-source" data-md-source="github">
+<a href="https://github.com/amundsen-io/amundsen/" title="Go to repository" class="md-source" data-md-source="github">
   
     <div class="md-source__icon">
       <svg viewBox="0 0 24 24" width="24" height="24">
@@ -1242,7 +1242,7 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/lyft/Amundsen/edit/master/docs/authentication/oidc.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/amundsen-io/amundsen/edit/master/docs/authentication/oidc.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
                 <h1 id="oidc-keycloak-authentication">OIDC (Keycloak) Authentication<a class="headerlink" href="#oidc-keycloak-authentication" title="Permanent link">&para;</a></h1>
@@ -1309,7 +1309,7 @@ to metadatalibrary and searchlibrary. This should be done using <code>REQUEST_HE
 </li>
 </ul>
 <p>This function will be called using the current <code>app</code> instance to add the headers in each request when calling any endpoint of
-metadatalibrary and searchlibrary <a href="https://github.com/lyft/amundsenfrontendlibrary/blob/master/amundsen_application/api/utils/request_utils.py">here</a></p>
+metadatalibrary and searchlibrary <a href="https://github.com/amundsen-io/amundsenfrontendlibrary/blob/master/amundsen_application/api/utils/request_utils.py">here</a></p>
 <h2 id="setting-up-auth-user-method">Setting Up Auth User Method<a class="headerlink" href="#setting-up-auth-user-method" title="Permanent link">&para;</a></h2>
 <p>In order to get the current authenticated user (which is being used in Amundsen for many operations), we need to set
 <code>AUTH_USER_METHOD</code> config variable in frontendlibrary.
@@ -1341,16 +1341,20 @@ This function should return email address, user id and any other required inform
 </ul>
 <p>Once done, you&rsquo;ll have the end-to-end authentication in Amundsen without any proxy or code changes.</p>
 <h2 id="using-okta-with-amundsen-on-k8s">Using Okta with Amundsen on K8s<a class="headerlink" href="#using-okta-with-amundsen-on-k8s" title="Permanent link">&para;</a></h2>
-<p>Assumptions:
-- You have access to okta (you can create a developer account for free!)
-- You are using k8s to setup amundsen. See <a href="../../amundsen-kube-helm/README.md">amundsen-kube-helm</a></p>
-<ol>
-<li>You need to have a stable DNS entry for amundsen-frontend that can be registered in okta.<ul>
+<p>Assumptions:</p>
+<ul>
+<li>You have access to okta (you can create a developer account for free!)</li>
+<li>
+<p>You are using k8s to setup amundsen. See <a href="../../amundsen-kube-helm/README.md">amundsen-kube-helm</a></p>
+</li>
+<li>
+<p>You need to have a stable DNS entry for amundsen-frontend that can be registered in okta.</p>
+<ul>
 <li>for example in AWS you can setup route53
 I will assume for the rest of this tutorial that your stable uri is &ldquo;<a href="http://amundsen-frontend">http://amundsen-frontend</a>&ldquo;</li>
 </ul>
 </li>
-<li>You need to register amundsen in okta as an app. More info <a href="https://developer.okta.com/blog/2018/07/12/flask-tutorial-simple-user-registration-and-login">here</a>. 
+<li>You need to register amundsen in okta as an app. More info <a href="https://developer.okta.com/blog/2018/07/12/flask-tutorial-simple-user-registration-and-login">here</a>.
 But here are specific instructions for amundsen:<ul>
 <li>At this time, I have only succesfully tested integration after ALL grants were checked.</li>
 <li>Set the Login redirect URIs to: <code>http://amundsen-frontend/oidc_callback</code></li>
@@ -1361,34 +1365,48 @@ But here are specific instructions for amundsen:<ul>
 </ul>
 </li>
 <li>At present, there is no oidc build of the frontend. So you will need to build an oidc build yourself and upload it to, for example ECR, for use by k8s.
-   You can then specify which image you want to use as a property override for your helm install like so:
-   <div class="highlight"><pre><span></span><code><span class="nt">frontEndServiceImage</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">123.dkr.ecr.us-west-2.amazonaws.com/edmunds/amundsen-frontend:oidc-test</span>
+   You can then specify which image you want to use as a property override for your helm install like so:</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="nt">frontEndServiceImage</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">123.dkr.ecr.us-west-2.amazonaws.com/edmunds/amundsen-frontend:oidc-test</span>
 </code></pre></div>
-   Please see further down in this doc for more instructions on how to build frontend.</li>
-<li>When you start up helm you will need to provide some properties. Here are the properties that need to be overridden for oidc to work:
-    <div class="highlight"><pre><span></span><code><span class="nt">oidcEnabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="nt">createOidcSecret</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="nt">OIDC_CLIENT_ID</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">YOUR_CLIENT_ID</span>
-<span class="nt">OIDC_CLIENT_SECRET</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">YOUR_SECRET_ID</span>
-<span class="nt">OIDC_ORG_URL</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">https://edmunds.okta.com</span>
-<span class="nt">OIDC_AUTH_SERVER_ID</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">default</span>
-<span class="c1"># You also will need a custom oidc frontend build too</span>
-<span class="nt">frontEndServiceImage</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">123.dkr.ecr.us-west-2.amazonaws.com/edmunds/amundsen-frontend:oidc-test</span>
-</code></pre></div></li>
-</ol>
+
+<p>Please see further down in this doc for more instructions on how to build frontend.
+4. When you start up helm you will need to provide some properties. Here are the properties that need to be overridden for oidc to work:</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><code>```yaml
+oidcEnabled: true
+createOidcSecret: true
+OIDC_CLIENT_ID: YOUR_CLIENT_ID
+OIDC_CLIENT_SECRET: YOUR_SECRET_ID
+OIDC_ORG_URL: https://edmunds.okta.com
+OIDC_AUTH_SERVER_ID: default
+# You also will need a custom oidc frontend build too
+frontEndServiceImage: 123.dkr.ecr.us-west-2.amazonaws.com/edmunds/amundsen-frontend:oidc-test
+```
+</code></pre></div>
+</td></tr></table>
+
 <h2 id="building-frontend-with-oidc">Building frontend with OIDC<a class="headerlink" href="#building-frontend-with-oidc" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Please look at <a href="../../developer_guide/">this guide</a> for instructions on how to build a custom frontend docker image.</li>
 <li>The only difference to above is that in your docker file you will want to add the following at the end. This will make sure its ready to go for oidc.
-You can take alook at the public.Dockerfile as a reference.
+You can take alook at the public.Dockerfile as a reference.</li>
+</ol>
 <div class="highlight"><pre><span></span><code><span class="k">RUN</span> pip3 install .<span class="o">[</span>oidc<span class="o">]</span>
 <span class="k">ENV</span> FRONTEND_SVC_CONFIG_MODULE_CLASS amundsen_application.oidc_config.OidcConfig
 <span class="k">ENV</span> APP_WRAPPER flaskoidc
 <span class="k">ENV</span> APP_WRAPPER_CLASS FlaskOIDC
 <span class="k">ENV</span> FLASK_OIDC_WHITELISTED_ENDPOINTS status,healthcheck,health
 <span class="k">ENV</span> FLASK_OIDC_SQLALCHEMY_DATABASE_URI sqlite:///sessions.db
-</code></pre></div></li>
-</ol>
+</code></pre></div>
                 
                   
                 
@@ -1447,7 +1465,7 @@ You can take alook at the public.Dockerfile as a reference.
       <div class="md-footer-copyright">
         
           <div class="md-footer-copyright__highlight">
-            Copyright &copy; 2020 Lyft, Inc.
+            Copyright &copy; 2018-2020 Amundsen Project Authors.
           </div>
         
         powered by
@@ -1460,13 +1478,13 @@ You can take alook at the public.Dockerfile as a reference.
   <div class="md-footer-social">
     <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
     
-      <a href="https://lyft.github.io/" target="_blank" rel="noopener" title="globe" class="md-footer-social__link fa fa-globe"></a>
+      <a href="https://www.amundsen.io/" target="_blank" rel="noopener" title="globe" class="md-footer-social__link fa fa-globe"></a>
     
-      <a href="https://github.com/lyft" target="_blank" rel="noopener" title="github-alt" class="md-footer-social__link fa fa-github-alt"></a>
+      <a href="https://github.com/amundsen-io" target="_blank" rel="noopener" title="github-alt" class="md-footer-social__link fa fa-github-alt"></a>
     
-      <a href="https://twitter.com/lyfteng" target="_blank" rel="noopener" title="twitter" class="md-footer-social__link fa fa-twitter"></a>
+      <a href="https://twitter.com/amundsenio" target="_blank" rel="noopener" title="twitter" class="md-footer-social__link fa fa-twitter"></a>
     
-      <a href="https://www.linkedin.com/company/lyft/" target="_blank" rel="noopener" title="linkedin" class="md-footer-social__link fa fa-linkedin"></a>
+      <a href="https://www.linkedin.com/company/the-linux-foundation/" target="_blank" rel="noopener" title="linkedin" class="md-footer-social__link fa fa-linkedin"></a>
     
   </div>
 

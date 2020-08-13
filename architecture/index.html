@@ -13,10 +13,10 @@
         <meta name="description" content="Amundsen is a metadata driven application for improving the productivity of data analysts, data scientists and engineers when interacting with data.">
       
       
-        <link rel="canonical" href="https://lyft.github.io/amundsen/architecture/">
+        <link rel="canonical" href="https://www.amundsen.io/amundsen/architecture/">
       
       
-        <meta name="author" content="Lyft, Inc.">
+        <meta name="author" content="Amundsen Project Authors.">
       
       
         <meta name="lang:clipboard.copy" content="Copy to clipboard">
@@ -100,7 +100,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="https://lyft.github.io/amundsen/" title="Amundsen" aria-label="Amundsen" class="md-header-nav__button md-logo">
+        <a href="https://www.amundsen.io/amundsen/" title="Amundsen" aria-label="Amundsen" class="md-header-nav__button md-logo">
           
             <img alt="logo" src="../img/logos/amundsen_mark_orange.svg" width="24" height="24">
           
@@ -159,7 +159,7 @@
 
   
 
-<a href="https://github.com/lyft/Amundsen/" title="Go to repository" class="md-source" data-md-source="github">
+<a href="https://github.com/amundsen-io/amundsen/" title="Go to repository" class="md-source" data-md-source="github">
   
     <div class="md-source__icon">
       <svg viewBox="0 0 24 24" width="24" height="24">
@@ -263,7 +263,7 @@
                   <div class="md-sidebar__inner">
                     <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="https://lyft.github.io/amundsen/" title="Amundsen" class="md-nav__button md-logo">
+    <a href="https://www.amundsen.io/amundsen/" title="Amundsen" class="md-nav__button md-logo">
       
         <img alt="logo" src="../img/logos/amundsen_mark_orange.svg" width="48" height="48">
       
@@ -277,7 +277,7 @@
 
   
 
-<a href="https://github.com/lyft/Amundsen/" title="Go to repository" class="md-source" data-md-source="github">
+<a href="https://github.com/amundsen-io/amundsen/" title="Go to repository" class="md-source" data-md-source="github">
   
     <div class="md-source__icon">
       <svg viewBox="0 0 24 24" width="24" height="24">
@@ -1208,29 +1208,29 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/lyft/Amundsen/edit/master/docs/architecture.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/amundsen-io/amundsen/edit/master/docs/architecture.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
                 <h1 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h1>
 <p>The following diagram shows the overall architecture for Amundsen.
 <img alt="" src="../img/Amundsen_Architecture.png" /></p>
 <h2 id="frontend">Frontend<a class="headerlink" href="#frontend" title="Permanent link">&para;</a></h2>
-<p>The <a href="https://github.com/lyft/amundsenfrontendlibrary#amundsen-frontend-service">frontend service</a> serves as web UI portal for users interaction. 
+<p>The <a href="https://github.com/amundsen-io/amundsenfrontendlibrary#amundsen-frontend-service">frontend service</a> serves as web UI portal for users interaction.
 It is Flask-based web app which representation layer is built with React with Redux, Bootstrap, Webpack, and Babel.</p>
 <h2 id="search">Search<a class="headerlink" href="#search" title="Permanent link">&para;</a></h2>
-<p>The <a href="https://github.com/lyft/amundsensearchlibrary#amundsen-search-service">search service</a> proxy leverages Elasticsearch&rsquo;s search functionality (or Apache Atlas&rsquo;s search API, if that&rsquo;s the backend you picked) and 
-provides a RESTful API to serve search requests from the frontend service. This <a href="https://github.com/lyft/amundsensearchlibrary#api-documentation">API is documented and live explorable</a> through OpenAPI aka &ldquo;Swagger&rdquo;.
-Currently only <a href="https://github.com/lyft/amundsendatabuilder/blob/master/databuilder/models/elasticsearch_document.py">table resources</a> are indexed and searchable.
-The search index is built with the <a href="https://github.com/lyft/amundsendatabuilder/blob/master/databuilder/publisher/elasticsearch_publisher.py">databuilder elasticsearch publisher</a>.</p>
+<p>The <a href="https://github.com/amundsen-io/amundsensearchlibrary#amundsen-search-service">search service</a> proxy leverages Elasticsearch&rsquo;s search functionality (or Apache Atlas&rsquo;s search API, if that&rsquo;s the backend you picked) and
+provides a RESTful API to serve search requests from the frontend service. This <a href="https://github.com/amundsen-io/amundsensearchlibrary#api-documentation">API is documented and live explorable</a> through OpenAPI aka &ldquo;Swagger&rdquo;.
+Currently only <a href="https://github.com/amundsen-io/amundsendatabuilder/blob/master/databuilder/models/elasticsearch_document.py">table resources</a> are indexed and searchable.
+The search index is built with the <a href="https://github.com/amundsen-io/amundsendatabuilder/blob/master/databuilder/publisher/elasticsearch_publisher.py">databuilder elasticsearch publisher</a>.</p>
 <h2 id="metadata">Metadata<a class="headerlink" href="#metadata" title="Permanent link">&para;</a></h2>
-<p>The <a href="https://github.com/lyft/amundsenmetadatalibrary#amundsen-metadata-service">metadata service</a> currently uses a Neo4j proxy to interact with Neo4j graph db and serves frontend service&rsquo;s metadata. 
+<p>The <a href="https://github.com/amundsen-io/amundsenmetadatalibrary#amundsen-metadata-service">metadata service</a> currently uses a Neo4j proxy to interact with Neo4j graph db and serves frontend service&rsquo;s metadata.
 The metadata is represented as a graph model:
 <img alt="" src="../img/graph_model.png" />
 The above diagram shows how metadata is modeled in Amundsen.</p>
 <h2 id="databuilder">Databuilder<a class="headerlink" href="#databuilder" title="Permanent link">&para;</a></h2>
-<p>Amundsen provides a <a href="https://github.com/lyft/amundsendatabuilder">data ingestion library</a> for building the metadata. At Lyft, we build the metadata once a day 
-using an Airflow DAG (<a href="https://github.com/lyft/amundsendatabuilder/tree/master/example/dags">examples</a>).</p>
-<p>In addition to &ldquo;real use&rdquo; the databuilder is also employed as a handy tool to ingest some <a href="https://github.com/lyft/amundsendatabuilder/blob/master/example/sample_data/">&ldquo;pre-cooked&rdquo; demo data</a> used in the Quickstart guide. This allows you to have a supersmall sample of data to explore so many of the features in Amundsen are lit up without you even having to setup any connections to databases etc. to ingest real data.</p>
+<p>Amundsen provides a <a href="https://github.com/amundsen-io/amundsendatabuilder">data ingestion library</a> for building the metadata. At Lyft, we build the metadata once a day
+using an Airflow DAG (<a href="https://github.com/amundsen-io/amundsendatabuilder/tree/master/example/dags">examples</a>).</p>
+<p>In addition to &ldquo;real use&rdquo; the databuilder is also employed as a handy tool to ingest some <a href="https://github.com/amundsen-io/amundsendatabuilder/blob/master/example/sample_data/">&ldquo;pre-cooked&rdquo; demo data</a> used in the Quickstart guide. This allows you to have a supersmall sample of data to explore so many of the features in Amundsen are lit up without you even having to setup any connections to databases etc. to ingest real data.</p>
                 
                   
                 
@@ -1289,7 +1289,7 @@ using an Airflow DAG (<a href="https://github.com/lyft/amundsendatabuilder/tree/
       <div class="md-footer-copyright">
         
           <div class="md-footer-copyright__highlight">
-            Copyright &copy; 2020 Lyft, Inc.
+            Copyright &copy; 2018-2020 Amundsen Project Authors.
           </div>
         
         powered by
@@ -1302,13 +1302,13 @@ using an Airflow DAG (<a href="https://github.com/lyft/amundsendatabuilder/tree/
   <div class="md-footer-social">
     <link rel="stylesheet" href="../assets/fonts/font-awesome.css">
     
-      <a href="https://lyft.github.io/" target="_blank" rel="noopener" title="globe" class="md-footer-social__link fa fa-globe"></a>
+      <a href="https://www.amundsen.io/" target="_blank" rel="noopener" title="globe" class="md-footer-social__link fa fa-globe"></a>
     
-      <a href="https://github.com/lyft" target="_blank" rel="noopener" title="github-alt" class="md-footer-social__link fa fa-github-alt"></a>
+      <a href="https://github.com/amundsen-io" target="_blank" rel="noopener" title="github-alt" class="md-footer-social__link fa fa-github-alt"></a>
     
-      <a href="https://twitter.com/lyfteng" target="_blank" rel="noopener" title="twitter" class="md-footer-social__link fa fa-twitter"></a>
+      <a href="https://twitter.com/amundsenio" target="_blank" rel="noopener" title="twitter" class="md-footer-social__link fa fa-twitter"></a>
     
-      <a href="https://www.linkedin.com/company/lyft/" target="_blank" rel="noopener" title="linkedin" class="md-footer-social__link fa fa-linkedin"></a>
+      <a href="https://www.linkedin.com/company/the-linux-foundation/" target="_blank" rel="noopener" title="linkedin" class="md-footer-social__link fa fa-linkedin"></a>
     
   </div>
 

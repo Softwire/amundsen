@@ -13,10 +13,10 @@
         <meta name="description" content="Amundsen is a metadata driven application for improving the productivity of data analysts, data scientists and engineers when interacting with data.">
       
       
-        <link rel="canonical" href="https://lyft.github.io/amundsen/developer_guide/">
+        <link rel="canonical" href="https://www.amundsen.io/amundsen/developer_guide/">
       
       
-        <meta name="author" content="Lyft, Inc.">
+        <meta name="author" content="Amundsen Project Authors.">
       
       
         <meta name="lang:clipboard.copy" content="Copy to clipboard">
@@ -100,7 +100,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="https://lyft.github.io/amundsen/" title="Amundsen" aria-label="Amundsen" class="md-header-nav__button md-logo">
+        <a href="https://www.amundsen.io/amundsen/" title="Amundsen" aria-label="Amundsen" class="md-header-nav__button md-logo">
           
             <img alt="logo" src="../img/logos/amundsen_mark_orange.svg" width="24" height="24">
           
@@ -159,7 +159,7 @@
 
   
 
-<a href="https://github.com/lyft/Amundsen/" title="Go to repository" class="md-source" data-md-source="github">
+<a href="https://github.com/amundsen-io/amundsen/" title="Go to repository" class="md-source" data-md-source="github">
   
     <div class="md-source__icon">
       <svg viewBox="0 0 24 24" width="24" height="24">
@@ -265,7 +265,7 @@
                   <div class="md-sidebar__inner">
                     <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="https://lyft.github.io/amundsen/" title="Amundsen" class="md-nav__button md-logo">
+    <a href="https://www.amundsen.io/amundsen/" title="Amundsen" class="md-nav__button md-logo">
       
         <img alt="logo" src="../img/logos/amundsen_mark_orange.svg" width="48" height="48">
       
@@ -279,7 +279,7 @@
 
   
 
-<a href="https://github.com/lyft/Amundsen/" title="Go to repository" class="md-source" data-md-source="github">
+<a href="https://github.com/amundsen-io/amundsen/" title="Go to repository" class="md-source" data-md-source="github">
   
     <div class="md-source__icon">
       <svg viewBox="0 0 24 24" width="24" height="24">
@@ -1442,43 +1442,54 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/lyft/Amundsen/edit/master/docs/developer_guide.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/amundsen-io/amundsen/edit/master/docs/developer_guide.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
                 <h1 id="developer-guide">Developer Guide<a class="headerlink" href="#developer-guide" title="Permanent link">&para;</a></h1>
 <p>This repository uses <code>git submodules</code> to link the code for all of Amundsen&rsquo;s libraries into a central location. This document offers guidance on how to develop locally with this setup.</p>
-<p>This workflow leverages <code>docker</code> and <code>docker-compose</code> in a very similar manner to our <a href="https://github.com/lyft/amundsen/blob/master/docs/installation.md#bootstrap-a-default-version-of-amundsen-using-docker">installation documentation</a>, to spin up instances of all 3 of Amundsen&rsquo;s services connected with an instances of Neo4j and ElasticSearch which ingest dummy data.</p>
+<p>This workflow leverages <code>docker</code> and <code>docker-compose</code> in a very similar manner to our <a href="https://github.com/amundsen-io/amundsen/blob/master/docs/installation.md#bootstrap-a-default-version-of-amundsen-using-docker">installation documentation</a>, to spin up instances of all 3 of Amundsen&rsquo;s services connected with an instances of Neo4j and ElasticSearch which ingest dummy data.</p>
 <h2 id="cloning-the-repository">Cloning the Repository<a class="headerlink" href="#cloning-the-repository" title="Permanent link">&para;</a></h2>
-<p>If cloning the repository for the first time, run the following command to clone the repository and pull the submodules:
-<div class="highlight"><pre><span></span><code>$ git clone --recursive git@github.com:lyft/amundsen.git
-</code></pre></div></p>
-<p>If  you have already cloned the repository but your submodules are empty, from your cloned <code>amundsen</code> directory run:
+<p>If cloning the repository for the first time, run the following command to clone the repository and pull the submodules:</p>
+<div class="highlight"><pre><span></span><code>$ git clone --recursive git@github.com:amundsen-io/amundsen.git
+</code></pre></div>
+
+<p>If  you have already cloned the repository but your submodules are empty, from your cloned <code>amundsen</code> directory run:</p>
 <div class="highlight"><pre><span></span><code>$ git submodule init
 $ git submodule update
-</code></pre></div></p>
+</code></pre></div>
+
 <p>After cloning the repository you can change directories into any of the upstream folders and work in those directories as you normally would. You will have full access to all of the git features, and working in the upstream directories will function the same as if you were working in a cloned version of that repository.</p>
 <h2 id="local-development">Local Development<a class="headerlink" href="#local-development" title="Permanent link">&para;</a></h2>
 <h3 id="ensure-you-have-the-latest-code">Ensure you have the latest code<a class="headerlink" href="#ensure-you-have-the-latest-code" title="Permanent link">&para;</a></h3>
-<p>Beyond running <code>git pull origin master</code> in your local <code>amundsen</code> directory, the submodules for our libraries also have to be manually updated to point to the latest versions of each libraries&rsquo; code. When creating a new branch on <code>amundsen</code> to begin local work, ensure your local submodules are pointing to the latest code for each library by running:
+<p>Beyond running <code>git pull origin master</code> in your local <code>amundsen</code> directory, the submodules for our libraries also have to be manually updated to point to the latest versions of each libraries&rsquo; code. When creating a new branch on <code>amundsen</code> to begin local work, ensure your local submodules are pointing to the latest code for each library by running:</p>
 <div class="highlight"><pre><span></span><code>$ git submodule update --remote
-</code></pre></div></p>
+</code></pre></div>
+
 <h3 id="building-local-changes">Building local changes<a class="headerlink" href="#building-local-changes" title="Permanent link">&para;</a></h3>
 <ol>
-<li>First, be sure that you have first followed the <a href="https://github.com/lyft/amundsen/blob/master/docs/installation.md#bootstrap-a-default-version-of-amundsen-using-docker">installation documentation</a> and can spin up a default version of Amundsen without any issues. If you have already completed this step, be sure to have stopped and removed those containers by running:
+<li>
+<p>First, be sure that you have first followed the <a href="https://github.com/amundsen-io/amundsen/blob/master/docs/installation.md#bootstrap-a-default-version-of-amundsen-using-docker">installation documentation</a> and can spin up a default version of Amundsen without any issues. If you have already completed this step, be sure to have stopped and removed those containers by running:
     <div class="highlight"><pre><span></span><code>$ docker-compose -f docker-amundsen.yml down
-</code></pre></div></li>
-<li>Launch the containers needed for local development (the <code>-d</code> option launches in background) :
+</code></pre></div></p>
+</li>
+<li>
+<p>Launch the containers needed for local development (the <code>-d</code> option launches in background) :
     <div class="highlight"><pre><span></span><code>$ docker-compose -f docker-amundsen-local.yml up -d
-</code></pre></div></li>
-<li>After making local changes rebuild and relaunch modified containers:
+</code></pre></div></p>
+</li>
+<li>
+<p>After making local changes rebuild and relaunch modified containers:
     <div class="highlight"><pre><span></span><code>$ docker-compose -f docker-amundsen-local.yml build <span class="se">\</span>
   <span class="o">&amp;&amp;</span> docker-compose -f docker-amundsen-local.yml up -d
-</code></pre></div></li>
-<li>Optionally, to still tail logs, in a different terminal you can:
+</code></pre></div></p>
+</li>
+<li>
+<p>Optionally, to still tail logs, in a different terminal you can:
     <div class="highlight"><pre><span></span><code>$ docker-compose -f docker-amundsen-local.yml logs --tail<span class="o">=</span><span class="m">3</span> -f
 <span class="c1">## - or just tail single container(s):</span>
 $ docker logs amundsenmetadata --tail <span class="m">10</span> -f
-</code></pre></div></li>
+</code></pre></div></p>
+</li>
 </ol>
 <h3 id="local-data">Local data<a class="headerlink" href="#local-data" title="Permanent link">&para;</a></h3>
 <p>Local data is persisted under .local/ (at the root of the project), clean up the following directories to reset the databases:</p>
@@ -1494,7 +1505,7 @@ rm -rf .local/neo4j
 <li>If you have made a change in <code>amundsen/amundsenfrontendlibrary</code> and do not see your changes, this could be due to your browser&rsquo;s caching behaviors. Either execute a hard refresh (recommended) or clear your browser cache (last resort).</li>
 </ol>
 <h3 id="testing-amundsen-frontend-locally">Testing Amundsen frontend locally<a class="headerlink" href="#testing-amundsen-frontend-locally" title="Permanent link">&para;</a></h3>
-<p>Amundsen has an instruction regarding local frontend launch <a href="https://github.com/lyft/amundsenfrontendlibrary/blob/master/docs/installation.md">here</a></p>
+<p>Amundsen has an instruction regarding local frontend launch <a href="https://github.com/amundsen-io/amundsenfrontendlibrary/blob/master/docs/installation.md">here</a></p>
 <p>Here are some additional changes you might need for windows (OS Win 10):</p>
 <ul>
 <li>amundsen_application/config.py, set LOCAL_HOST = &lsquo;127.0.0.1&rsquo;</li>
@@ -1502,21 +1513,23 @@ rm -rf .local/neo4j
  (for other microservices also need to change <code>port</code> here because the default is 5000)</li>
 </ul>
 <p>(using that approach you can run locally another microservices as well if needed)  </p>
-<p>Once you have a running frontend microservice, the rest of Amundsen components can be launched with docker-compose 
+<p>Once you have a running frontend microservice, the rest of Amundsen components can be launched with docker-compose
 from the root Amundsen project (don&rsquo;t forget to remove frontend microservice section from docker-amundsen.yml):
 <code>docker-compose -f docker-amundsen.yml up</code>
-<a href="https://github.com/lyft/amundsen/blob/master/docs/installation.md">https://github.com/lyft/amundsen/blob/master/docs/installation.md</a></p>
+<a href="https://github.com/amundsen-io/amundsen/blob/master/docs/installation.md">https://github.com/amundsen-io/amundsen/blob/master/docs/installation.md</a></p>
 <h3 id="developing-dockerbuild-file">Developing Dockerbuild file<a class="headerlink" href="#developing-dockerbuild-file" title="Permanent link">&para;</a></h3>
 <p>When making edits to Dockerbuild file (docker-amundsen-local.yml) it is good to see what you are getting wrong locally.
 To do that you build it <code>docker build .</code></p>
-<p>And then the output should include a line like so at the step right before it failed:
-<div class="highlight"><pre><span></span><code>Step <span class="m">3</span>/20 : RUN git clone --recursive git://github.com/lyft/amundsenfrontendlibrary.git  <span class="o">&amp;&amp;</span> <span class="nb">cd</span> amundsenfrontendlibrary  <span class="o">&amp;&amp;</span> git submodule foreach git pull origin master
+<p>And then the output should include a line like so at the step right before it failed:</p>
+<div class="highlight"><pre><span></span><code>Step <span class="m">3</span>/20 : RUN git clone --recursive git://github.com/amundsen-io/amundsenfrontendlibrary.git  <span class="o">&amp;&amp;</span> <span class="nb">cd</span> amundsenfrontendlibrary  <span class="o">&amp;&amp;</span> git submodule foreach git pull origin master
  ---&gt; Using cache
  ---&gt; ec052612747e
-</code></pre></div></p>
-<p>You can then launch a container from this image like so
+</code></pre></div>
+
+<p>You can then launch a container from this image like so</p>
 <div class="highlight"><pre><span></span><code>docker container run -it --name<span class="o">=</span>debug ec052612747e /bin/sh
-</code></pre></div></p>
+</code></pre></div>
+
 <h3 id="building-and-testing-amundsen-frontend-docker-image-or-any-other-service">Building and Testing Amundsen Frontend Docker Image (or any other service)<a class="headerlink" href="#building-and-testing-amundsen-frontend-docker-image-or-any-other-service" title="Permanent link">&para;</a></h3>
 <ol>
 <li>Build your image
@@ -1532,12 +1545,16 @@ the amundsenfrontend image point to the hash of the image that you built</li>
 </code></pre></div>
 
 <h3 id="pushing-image-to-ecr-and-using-in-k8s">Pushing image to ECR and using in K8s<a class="headerlink" href="#pushing-image-to-ecr-and-using-in-k8s" title="Permanent link">&para;</a></h3>
-<p>Assumptions:
-- You have an aws account
-- You have aws command line set up and ready to go</p>
-<ol>
-<li>Choose an ECR repository you&rsquo;d like to push to (or create a new one)
-<a href="https://us-west-2.console.aws.amazon.com/ecr/repositories">https://us-west-2.console.aws.amazon.com/ecr/repositories</a></li>
+<p>Assumptions:</p>
+<ul>
+<li>You have an aws account</li>
+<li>
+<p>You have aws command line set up and ready to go</p>
+</li>
+<li>
+<p>Choose an ECR repository you&rsquo;d like to push to (or create a new one)
+<a href="https://us-west-2.console.aws.amazon.com/ecr/repositories">https://us-west-2.console.aws.amazon.com/ecr/repositories</a></p>
+</li>
 <li>
 <p>Click onto repository name and open &ldquo;View push commands&rdquo; cheat sheet
 2b. Login</p>
@@ -1561,7 +1578,7 @@ docker push &lt;?&gt;.dkr.ecr.&lt;?&gt;.amazonaws.com/amundsen-frontend:{YYYY-MM
 <p>When updating amundsen-frontend, make sure to do a hard refresh of amundsen with emptying the cache,
 otherwise you will see stale version of webpage.</p>
 </li>
-</ol>
+</ul>
 <h3 id="test-search-service-in-local-using-staging-or-production-data">Test search service in local using staging or production data<a class="headerlink" href="#test-search-service-in-local-using-staging-or-production-data" title="Permanent link">&para;</a></h3>
 <p>To test in local, we need to stand up Elasticsearch, publish index data, and stand up Elastic search</p>
 <h4 id="standup-elasticsearch">Standup Elasticsearch<a class="headerlink" href="#standup-elasticsearch" title="Permanent link">&para;</a></h4>
@@ -1586,7 +1603,7 @@ Example:</p>
 5
 6
 7</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><code>cd ~/src/
-git clone git@github.com:lyft/amundsendatabuilder.git
+git clone git@github.com:amundsen-io/amundsendatabuilder.git
 cd ~/src/amundsendatabuilder
 virtualenv venv
 source venv/bin/activate
@@ -1738,7 +1755,7 @@ else:
 </td></tr></table>
 
 <h4 id="standup-search-service">Standup Search service<a class="headerlink" href="#standup-search-service" title="Permanent link">&para;</a></h4>
-<p>Follow this <a href="https://github.com/lyft/amundsensearchlibrary#instructions-to-start-the-search-service-from-source">instruction</a></p>
+<p>Follow this <a href="https://github.com/amundsen-io/amundsensearchlibrary#instructions-to-start-the-search-service-from-source">instruction</a></p>
 <p>Test the search API with this command:</p>
 <table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="codehilite"><pre><span></span><code>curl -vv &quot;http://localhost:5001/search?query_term=test&amp;page_index=0&quot;
 </code></pre></div>
@@ -1801,7 +1818,7 @@ else:
       <div class="md-footer-copyright">
         
           <div class="md-footer-copyright__highlight">
-            Copyright &copy; 2020 Lyft, Inc.
+            Copyright &copy; 2018-2020 Amundsen Project Authors.
           </div>
         
         powered by
@@ -1814,13 +1831,13 @@ else:
   <div class="md-footer-social">
     <link rel="stylesheet" href="../assets/fonts/font-awesome.css">
     
-      <a href="https://lyft.github.io/" target="_blank" rel="noopener" title="globe" class="md-footer-social__link fa fa-globe"></a>
+      <a href="https://www.amundsen.io/" target="_blank" rel="noopener" title="globe" class="md-footer-social__link fa fa-globe"></a>
     
-      <a href="https://github.com/lyft" target="_blank" rel="noopener" title="github-alt" class="md-footer-social__link fa fa-github-alt"></a>
+      <a href="https://github.com/amundsen-io" target="_blank" rel="noopener" title="github-alt" class="md-footer-social__link fa fa-github-alt"></a>
     
-      <a href="https://twitter.com/lyfteng" target="_blank" rel="noopener" title="twitter" class="md-footer-social__link fa fa-twitter"></a>
+      <a href="https://twitter.com/amundsenio" target="_blank" rel="noopener" title="twitter" class="md-footer-social__link fa fa-twitter"></a>
     
-      <a href="https://www.linkedin.com/company/lyft/" target="_blank" rel="noopener" title="linkedin" class="md-footer-social__link fa fa-linkedin"></a>
+      <a href="https://www.linkedin.com/company/the-linux-foundation/" target="_blank" rel="noopener" title="linkedin" class="md-footer-social__link fa fa-linkedin"></a>
     
   </div>
 
